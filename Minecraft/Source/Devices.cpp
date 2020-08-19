@@ -1,4 +1,5 @@
 #include "Devices.h"
+#include "Global.h"
 
 #include <glew.h>
 #include <intrin.h>
@@ -9,12 +10,12 @@
 
 std::string Devices::GetClientVersion()
 {
-	return std::string("Minecraft 1.0");
+	return std::string("Minecraft ") + Global::GetMCVersion();
 }
 
 std::string Devices::GetServerVersion()
 {
-	return std::string("Minecraft Server 1.0");
+	return std::string("Minecraft Server ") + Global::GetMCVersion();
 }
 
 std::string Devices::GetGLVersion()

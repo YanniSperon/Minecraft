@@ -2,56 +2,65 @@
 #include "Global.h"
 #include "Console.h"
 #include "Input.h"
-#include "GUI.h"
+#include "GUI/GUI.h"
 
 #include <glew.h>
+
+static bool s_InitializedGL = false;
 
 MC::Window::Window()
     : m_Window(nullptr), m_Width(0), m_Height(0), m_GUI(nullptr)
 {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    m_Width = Global::GetConfig().GetStartingWidth();
-    Console::Info("%i", Global::GetConfig().GetStartingWidth());
-    m_Height = Global::GetConfig().GetStartingHeight();
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    Console::Assert(glfwInit(), "Failed GLFW Initialization!");
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    Console::Info("Initializing window (%i, %i)", m_Width, m_Height);
-    m_Window = glfwCreateWindow(m_Width, m_Height, "Minecraft", NULL, NULL);
-    if (m_Window) {
-        Console::Info("Succeeded creation");
+    m_Width = 1920;
+    m_Height = 1080;
+    if (!s_InitializedGL) {
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        //m_Width = Global::GetConfig().GetStartingWidth();
+        //m_Height = Global::GetConfig().GetStartingHeight();
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        Console::Assert(glfwInit(), "Failed GLFW Initialization!");
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        Console::Info("Initializing window (%i, %i)", m_Width, m_Height);
+        m_Window = glfwCreateWindow(m_Width, m_Height, "Minecraft", NULL, NULL);
+        if (m_Window) {
+            Console::Info("Succeeded creation");
+        }
+        else {
+            Console::Info("Failed creation");
+        }
+        //Console::Assert(!m_Window, "Failed Window Creation!");
+        glfwMakeContextCurrent(m_Window);
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        GLenum err = glewInit();
+        Console::Assert(err == GLEW_OK, "Failed GLEW Initialization - %s", reinterpret_cast<char const*>(glewGetErrorString(err)));
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        glfwSetCursorPosCallback(m_Window, Input::MousePositionCallback);
+        glfwSetKeyCallback(m_Window, Input::KeyCallback);
+        glfwSetWindowSizeCallback(m_Window, Window::WindowSizeCallback);
+        //////////////////////////////////////////////////////////////////////////////////////////////
     }
-    else {
-        Console::Info("Failed creation");
-    }
-    //Console::Assert(!m_Window, "Failed Window Creation!");
-    glfwMakeContextCurrent(m_Window);
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    GLenum err = glewInit();
-    Console::Assert(err == GLEW_OK, "Failed GLEW Initialization - %s", reinterpret_cast<char const*>(glewGetErrorString(err)));
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    glfwSetCursorPosCallback(m_Window, Input::MousePositionCallback);
-    glfwSetKeyCallback(m_Window, Input::KeyCallback);
-    glfwSetWindowSizeCallback(m_Window, Window::WindowSizeCallback);
-    //////////////////////////////////////////////////////////////////////////////////////////////
     m_GUI = new GUI(m_Window);
     //////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 MC::Window::~Window()
 {
+    if (s_InitializedGL) {
+        glfwTerminate();
+        s_InitializedGL = false;
+    }
     delete m_GUI;
 }
 
-unsigned int MC::Window::GetWidth()
+int MC::Window::GetWidth()
 {
     return m_Width;
 }
 
-unsigned int MC::Window::GetHeight()
+int MC::Window::GetHeight()
 {
     return m_Height;
 }
@@ -66,12 +75,12 @@ MC::GUI& MC::Window::GetGUI()
     return *m_GUI;
 }
 
-void MC::Window::SetWidth(unsigned int width)
+void MC::Window::SetWidth(int width)
 {
     m_Width = width;
 }
 
-void MC::Window::SetHeight(unsigned int height)
+void MC::Window::SetHeight(int height)
 {
     m_Height = height;
 }
@@ -111,4 +120,9 @@ void MC::Window::ClearBuffer()
 void MC::Window::SwapBuffers()
 {
     glfwSwapBuffers(m_Window);
+}
+
+bool MC::Window::ShouldCloseWindow()
+{
+    return glfwWindowShouldClose(m_Window);
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GUI.h"
+#include "GUI/GUI.h"
 
 #include <glfw3.h>
 #include <memory>
@@ -9,19 +9,19 @@ namespace MC {
 	class Window {
 	private:
 		GLFWwindow* m_Window;
-		unsigned int m_Width, m_Height;
+		int m_Width, m_Height;
 		GUI* m_GUI;
 	public:
 		Window();
 		~Window();
 
-		unsigned int GetWidth();
-		unsigned int GetHeight();
+		int GetWidth();
+		int GetHeight();
 		GLFWwindow* GetGLFWwindow();
 		GUI& GetGUI();
 
-		void SetWidth(unsigned int width);
-		void SetHeight(unsigned int height);
+		void SetWidth(int width);
+		void SetHeight(int height);
 		void SetGLFWwindow(GLFWwindow* window);
 		void SetGUI(GUI* gui);
 
@@ -32,5 +32,7 @@ namespace MC {
 		void PollEvents();
 		void ClearBuffer();
 		void SwapBuffers();
+
+		bool ShouldCloseWindow();
 	};
 }

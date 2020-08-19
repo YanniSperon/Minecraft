@@ -1,7 +1,7 @@
 #include "Input.h"
 #include "Console.h"
 #include "Devices.h"
-#include "GUI.h"
+#include "GUI/GUI.h"
 #include "Global.h"
 
 #include <glew.h>
@@ -31,7 +31,7 @@ int main() {
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    while (!glfwWindowShouldClose(Global::GetWindow().GetGLFWwindow()))
+    while (!Global::GetWindow().ShouldCloseWindow())
     {
         //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,47 +58,39 @@ int main() {
         //////////////////////////////////////////////////////////////////////////////////////////////
 
         ImGui_ImplGlfwGL3_NewFrame();
-        //ImGui::PushFont(customFont);
         if (shouldDisplayDebugInfo) {
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
             ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
             ImGui::SetNextWindowSize(ImVec2(Global::GetWindow().GetWidth(), Global::GetWindow().GetHeight()));
             ImGui::Begin("Debug##F3Menu", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoInputs);
-            //ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::Text("%s", Devices::GetClientVersion().c_str());
-            ImGui::SameLine(ImGui::GetWindowSize().x / 2.0f);
-            ImGui::Text("%s", Devices::GetCPPVersion().c_str());
-            ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
-            ImGui::Text("%s", Devices::GetServerVersion().c_str());
-            ImGui::Spacing();
-            ImGui::Spacing();
-            ImGui::Text("XYZ: 0.0 / 0.0 / 0.0");
+            
+            GUI::PlaceTextLeft("%s", Devices::GetClientVersion().c_str());
+            GUI::SameLine();
+            GUI::PlaceTextRight("%s", Devices::GetCPPVersion().c_str());
+
+            GUI::PlaceTextLeft("%.1f FPS", ImGui::GetIO().Framerate);
+            GUI::SameLine();
+            GUI::PlaceTextRight("Total Memory: %s", Devices::GetInstalledMemory().c_str());
+
+            GUI::PlaceTextLeft("%s", Devices::GetServerVersion().c_str());
+            GUI::SameLine();
+            GUI::PlaceTextRight("Used Memory: %s", Devices::GetUsedMemory().c_str());
+
+            GUI::PlaceTextRight("CPU: %s", Devices::GetCPUVersion().c_str());
+
+            GUI::PlaceTextLeft("XYZ: %.3f / %.3f / %.3f", 1.0f, 1.0f, 1.0f);
+
+            GUI::PlaceTextRight("Display: %ix%i", Global::GetWindow().GetWidth(), Global::GetWindow().GetHeight());
+
+            GUI::PlaceTextRight("%s", Devices::GetGPUVersion().c_str());
+
+            GUI::PlaceTextRight("%s", Devices::GetGLVersion().c_str());
+
             ImGui::End();
-            ImGui::SetNextWindowPos(ImVec2(1000.0f, 0.0f));
-            ImGui::SetNextWindowSize(ImVec2(519.0f, 144.0f));
-            ImGui::Begin("Debug##F3MenuRight", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoInputs);
-            //ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            GUI::RightHorizontalAlignText(Devices::GetCPPVersion());
-            ImGui::Text("%s", Devices::GetCPPVersion().c_str());
-            GUI::RightHorizontalAlignText("Total Memory: " + Devices::GetInstalledMemory());
-            ImGui::Text("Total Memory: %s", Devices::GetInstalledMemory().c_str());
-            GUI::RightHorizontalAlignText("Used Memory: " + Devices::GetUsedMemory());
-            ImGui::Text("Used Memory: %s", Devices::GetUsedMemory().c_str());
-            GUI::RightHorizontalAlignText("CPU: " + Devices::GetCPUVersion());
-            ImGui::Text("CPU: %s", Devices::GetCPUVersion().c_str());
-            //Console::Info("Current Window Size: {%f, %f}", ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
-            ImGui::Spacing();
-            ImGui::Spacing();
-            GUI::RightHorizontalAlignText("Display: 1920x1080");
-            ImGui::Text("Display: 1920x1080");
-            GUI::RightHorizontalAlignText(Devices::GetGPUVersion());
-            ImGui::Text("%s", Devices::GetGPUVersion().c_str());
-            GUI::RightHorizontalAlignText(Devices::GetGLVersion());
-            ImGui::Text("%s", Devices::GetGLVersion().c_str());
-            ImGui::End();
+
             ImGui::PopStyleColor();
         }
-        //ImGui::PopFont();
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -113,7 +105,6 @@ int main() {
         //////////////////////////////////////////////////////////////////////////////////////////////
     }
 
-    glfwTerminate();
     return 0;
 
     //////////////////////////////////////////////////////////////////////////////////////////////

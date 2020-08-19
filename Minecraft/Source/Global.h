@@ -15,7 +15,7 @@ public:
 	static void Initialize();
 	static std::chrono::steady_clock::time_point& GetStartTime();
 	static std::vector<std::string>& GetConsoleLog();
-	static std::string& GetEngineVersion();
+	static std::string& GetMCVersion();
 	static Config& GetConfig();
 	static MC::Window& GetWindow();
 	static MC::KeyboardInput& GetKeyboardInput();

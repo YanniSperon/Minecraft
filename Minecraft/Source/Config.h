@@ -2,7 +2,7 @@
 
 class Config {
 private:
-	unsigned int m_StartingWidth, m_StartingHeight;
+	int m_StartingWidth, m_StartingHeight;
 	bool m_HasVSync;
 public:
 	Config();

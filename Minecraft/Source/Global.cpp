@@ -5,7 +5,7 @@
 
 static std::vector<std::string> g_ConsoleLog;
 static std::chrono::steady_clock::time_point g_SystemStartTime;
-static std::string g_ENGINE_VERSION;
+static std::string g_MCVersion;
 static std::unique_ptr<MC::Window> g_Window;
 static std::unique_ptr<MC::KeyboardInput> g_KeyboardInput;
 static std::unique_ptr<MC::MouseInput> g_MouseInput;
@@ -15,7 +15,7 @@ void Global::Initialize()
 {
 	g_ConsoleLog = std::vector<std::string>();
 	g_SystemStartTime = std::chrono::high_resolution_clock::now();
-	g_ENGINE_VERSION = "1.0.0";
+	g_MCVersion = "1.0.0";
 
 	g_Config = std::unique_ptr<Config>(new Config());
 	g_Window = std::unique_ptr<MC::Window>(new MC::Window());
@@ -33,9 +33,9 @@ std::vector<std::string>& Global::GetConsoleLog()
 	return g_ConsoleLog;
 }
 
-std::string& Global::GetEngineVersion()
+std::string& Global::GetMCVersion()
 {
-	return g_ENGINE_VERSION;
+	return g_MCVersion;
 }
 
 Config& Global::GetConfig()
