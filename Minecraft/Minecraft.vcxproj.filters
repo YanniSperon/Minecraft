@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="3D">
+      <UniqueIdentifier>{1C715900-08FD-870B-71AB-880B5D56880B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D\Mesh">
+      <UniqueIdentifier>{58F8B6FB-C4D7-3597-CDEF-C06D394E9CF8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="GUI">
       <UniqueIdentifier>{2AEC870B-96F5-877C-1F71-9E7C8B79937C}</UniqueIdentifier>
     </Filter>
@@ -30,6 +36,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\3D\Mesh\Mesh3D.h">
+      <Filter>3D\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Vertex3D.h">
+      <Filter>3D</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Config.h" />
     <ClInclude Include="Source\Console.h" />
     <ClInclude Include="Source\Devices.h" />
@@ -906,11 +918,19 @@
       <Filter>Vendor\glm</Filter>
     </ClInclude>
     <ClInclude Include="Source\Window.h" />
-    <ClInclude Include="Source\3D\Mesh\MeshManager.h" />
-    <ClInclude Include="Source\3D\Vertex3D.h" />
-    <ClInclude Include="Source\3D\Mesh\Mesh3D.h" />
+    <ClInclude Include="Source\3D\Mesh\Mesh3DManager.h">
+      <Filter>3D\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Shader\Shader.h" />
+    <ClInclude Include="Source\3D\Shader\ShaderManager.h" />
+    <ClInclude Include="Source\3D\Texture\Texture.h" />
+    <ClInclude Include="Source\Vendor\stb\stb_image.h" />
+    <ClInclude Include="Source\3D\Texture\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp">
+      <Filter>3D\Mesh</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Config.cpp" />
     <ClCompile Include="Source\Console.cpp" />
@@ -939,6 +959,13 @@
       <Filter>Vendor\glm\detail</Filter>
     </ClCompile>
     <ClCompile Include="Source\Window.cpp" />
-    <ClCompile Include="Source\3D\Mesh\MeshManager.cpp" />
+    <ClCompile Include="Source\3D\Mesh\Mesh3DManager.cpp">
+      <Filter>3D\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Shader\Shader.cpp" />
+    <ClCompile Include="Source\3D\Shader\ShaderManager.cpp" />
+    <ClCompile Include="Source\Vendor\stb\stb_image.cpp" />
+    <ClCompile Include="Source\3D\Texture\Texture.cpp" />
+    <ClCompile Include="Source\3D\Texture\TextureManager.cpp" />
   </ItemGroup>
 </Project>

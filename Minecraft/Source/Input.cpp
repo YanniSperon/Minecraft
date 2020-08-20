@@ -1,5 +1,5 @@
 #include "Input.h"
-#include "Math/Vector2D.h"
+#include "Vendor/glm/glm.hpp"
 
 #include <vector>
 
@@ -25,7 +25,7 @@ namespace MC {
 
 	static std::vector<KeyEvent> keyEvents;
 	static std::vector<MouseEvent> mouseEvents;
-	static Math::Vector2D mousePosition;
+	static glm::vec3 mousePosition;
 
 	void Input::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{

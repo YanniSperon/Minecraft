@@ -6,10 +6,13 @@
 static std::vector<std::string> g_ConsoleLog;
 static std::chrono::steady_clock::time_point g_SystemStartTime;
 static std::string g_MCVersion;
+static std::unique_ptr<Config> g_Config;
 static std::unique_ptr<MC::Window> g_Window;
 static std::unique_ptr<MC::KeyboardInput> g_KeyboardInput;
 static std::unique_ptr<MC::MouseInput> g_MouseInput;
-static std::unique_ptr<Config> g_Config;
+static std::unique_ptr<MC::Mesh3DManager> g_Mesh3DManager;
+static std::unique_ptr<MC::ShaderManager> g_ShaderManager;
+static std::unique_ptr<MC::TextureManager> g_TextureManager;
 
 void Global::Initialize()
 {
@@ -21,6 +24,9 @@ void Global::Initialize()
 	g_Window = std::unique_ptr<MC::Window>(new MC::Window());
 	g_KeyboardInput = std::unique_ptr<MC::KeyboardInput>(new MC::KeyboardInput());
 	g_MouseInput = std::unique_ptr<MC::MouseInput>(new MC::MouseInput());
+	g_Mesh3DManager = std::unique_ptr<MC::Mesh3DManager>(new MC::Mesh3DManager());
+	g_ShaderManager = std::unique_ptr<MC::ShaderManager>(new MC::ShaderManager());
+	g_TextureManager = std::unique_ptr<MC::TextureManager>(new MC::TextureManager());
 }
 
 std::chrono::steady_clock::time_point& Global::GetStartTime()
@@ -56,4 +62,19 @@ MC::KeyboardInput& Global::GetKeyboardInput()
 MC::MouseInput& Global::GetMouseInput()
 {
 	return *g_MouseInput;
+}
+
+MC::Mesh3DManager& Global::GetMesh3DManager()
+{
+	return *g_Mesh3DManager;
+}
+
+MC::ShaderManager& Global::GetShaderManager()
+{
+	return *g_ShaderManager;
+}
+
+MC::TextureManager& Global::GetTextureManager()
+{
+	return *g_TextureManager;
 }

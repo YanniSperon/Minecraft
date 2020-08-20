@@ -9,21 +9,15 @@
 static bool s_InitializedGL = false;
 
 MC::Window::Window()
-    : m_Window(nullptr), m_Width(0), m_Height(0), m_GUI(nullptr)
+    : m_Window(nullptr), m_Width(Global::GetConfig().GetStartingWidth()), m_Height(Global::GetConfig().GetStartingHeight()), m_GUI(nullptr)
 {
-    m_Width = 1920;
-    m_Height = 1080;
     if (!s_InitializedGL) {
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        //m_Width = Global::GetConfig().GetStartingWidth();
-        //m_Height = Global::GetConfig().GetStartingHeight();
         //////////////////////////////////////////////////////////////////////////////////////////////
         Console::Assert(glfwInit(), "Failed GLFW Initialization!");
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         //////////////////////////////////////////////////////////////////////////////////////////////
-        Console::Info("Initializing window (%i, %i)", m_Width, m_Height);
         m_Window = glfwCreateWindow(m_Width, m_Height, "Minecraft", NULL, NULL);
         if (m_Window) {
             Console::Info("Succeeded creation");

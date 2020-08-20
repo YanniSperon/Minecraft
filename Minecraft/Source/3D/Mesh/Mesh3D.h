@@ -1,36 +1,30 @@
 #pragma once
 
-#include "glew.h"
 #include "3D/Vertex3D.h"
 
+#include <glew.h>
+#include <string>
+
 namespace MC {
-	struct Mesh3D {
-
-		Mesh3D()
-			: vertices(nullptr), numVertices(0), indices(nullptr), numIndices(0), vramHandle(0)
-		{
-
-		}
-
-		~Mesh3D()
-		{
-			delete[] vertices;
-			delete[] indices;
-			numVertices = numIndices = 0;
-		}
-
+	class Mesh3D{
+	private:
 		Vertex3D* vertices;
 		GLuint numVertices;
 		GLuint* indices;
 		GLuint numIndices;
-		GLuint vramHandle;
+		GLuint vramHandleVBO;
+		GLuint vramHandleIBO;
+	public:
+		Mesh3D();
+		Mesh3D(const std::string& pathToModel, bool shouldLoadToVRAM);
+		~Mesh3D();
 
-		GLsizeiptr VertexBufferSize() const {
-			return numVertices * sizeof(Vertex3D);
-		}
+		GLsizeiptr VertexBufferSize();
+		GLsizeiptr IndexBufferSize();
 
-		GLsizeiptr IndexBufferSize() const {
-			return numIndices * sizeof(GLuint);
-		}
+		void LoadToRAM(const std::string& path);
+		void UnloadFromRAM();
+		void LoadToVRAM();
+		void UnloadFromVRAM();
 	};
 }

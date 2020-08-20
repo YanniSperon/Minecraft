@@ -3,6 +3,9 @@
 #include "Window.h"
 #include "Input.h"
 #include "Config.h"
+#include "3D/Mesh/Mesh3DManager.h"
+#include "3D/Shader/ShaderManager.h"
+#include "3D/Texture/TextureManager.h"
 
 #include <vector>
 #include <string>
@@ -20,4 +23,7 @@ public:
 	static MC::Window& GetWindow();
 	static MC::KeyboardInput& GetKeyboardInput();
 	static MC::MouseInput& GetMouseInput();
+	static MC::Mesh3DManager& GetMesh3DManager();
+	static MC::ShaderManager& GetShaderManager();
+	static MC::TextureManager& GetTextureManager();
 };

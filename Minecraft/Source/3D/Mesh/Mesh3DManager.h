@@ -6,12 +6,12 @@
 #include <unordered_map>
 
 namespace MC {
-	class MeshManager {
+	class Mesh3DManager {
 	private:
 		std::unordered_map<std::string, Mesh3D*> meshes;
 	public:
-		MeshManager();
-		~MeshManager();
+		Mesh3DManager();
+		~Mesh3DManager();
 
 		Mesh3D* GetMesh(const std::string& name);
 	};
