@@ -2,24 +2,42 @@
 
 MC::TextureManager::TextureManager()
 {
-	textures = std::unordered_map<std::string, Texture*>();
+	m_Textures = std::unordered_map<std::string, std::shared_ptr<Texture>>();
 }
 
 MC::TextureManager::~TextureManager()
 {
-	for (auto& it : textures) {
-		delete it.second;
-	}
-	textures.clear();
+	m_Textures.clear();
 }
 
-MC::Texture* MC::TextureManager::GetTexture(const std::string& name)
+std::shared_ptr<MC::Texture> MC::TextureManager::GetTexture(const std::string& name)
 {
-	if (textures.find(name) != textures.end()) {
-		return textures[name];
+	if (m_Textures.find(name) != m_Textures.end()) {
+		return m_Textures[name];
 	}
 	else {
-		textures[name] = new Texture(name);
-		return textures[name];
+		m_Textures[name] = std::make_shared<Texture>(name);
+		return m_Textures[name];
 	}
+}
+
+void MC::TextureManager::Cleanup()
+{
+	if (m_ShouldCleanup) {
+		auto it = m_Textures.begin();
+		while (it != m_Textures.end()) {
+			if (it->second.unique() && !it->second->HasFakeUser()) {
+				it = m_Textures.erase(it);
+			}
+			else {
+				it++;
+			}
+		}
+		m_ShouldCleanup = false;
+	}
+}
+
+void MC::TextureManager::MarkForCleanup()
+{
+	m_ShouldCleanup = true;
 }

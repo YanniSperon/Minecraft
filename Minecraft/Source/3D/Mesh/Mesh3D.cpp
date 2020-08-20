@@ -9,14 +9,8 @@
 #include <fstream>
 #include <strstream>
 
-MC::Mesh3D::Mesh3D()
-	: vertices(nullptr), numVertices(0), indices(nullptr), numIndices(0), vramHandleVBO(0), vramHandleIBO(0)
-{
-
-}
-
 MC::Mesh3D::Mesh3D(const std::string& pathToModel, bool shouldLoadToVRAM)
-	: vertices(nullptr), numVertices(0), indices(nullptr), numIndices(0), vramHandleVBO(0), vramHandleIBO(0)
+	: m_Vertices(nullptr), m_NumVertices(0), m_Indices(nullptr), m_NumIndices(0), m_VRAMHandleVBO(0), m_VRAMHandleIBO(0)
 {
 	LoadToRAM(pathToModel);
 	if (shouldLoadToVRAM) {
@@ -26,19 +20,32 @@ MC::Mesh3D::Mesh3D(const std::string& pathToModel, bool shouldLoadToVRAM)
 
 MC::Mesh3D::~Mesh3D()
 {
-	
-	// add delete the vram reference if it exists
+	UnloadFromRAM();
+	UnloadFromVRAM();
+}
 
+void MC::Mesh3D::Bind()
+{
+	glBindBuffer(GL_ARRAY_BUFFER, m_VRAMHandleVBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 3));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 5));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VRAMHandleIBO);
+}
+
+void MC::Mesh3D::Draw()
+{
+	glDrawElements(GL_TRIANGLES, m_NumIndices, GL_UNSIGNED_INT, 0);
 }
 
 GLsizeiptr MC::Mesh3D::VertexBufferSize()
 {
-	return numVertices * sizeof(Vertex3D);
+	return m_NumVertices * sizeof(Vertex3D);
 }
 
 GLsizeiptr MC::Mesh3D::IndexBufferSize()
 {
-	return numIndices * sizeof(GLuint);
+	return m_NumVertices * sizeof(GLuint);
 }
 
 void MC::Mesh3D::LoadToRAM(const std::string& path) {
@@ -108,30 +115,34 @@ void MC::Mesh3D::LoadToRAM(const std::string& path) {
 		}
 	}
 
-	vertices = new Vertex3D[tempVertices.size()];
-	for (unsigned int i = 0; i < tempVertices.size(); i++) {
-		vertices[i] = tempVertices[i];
+	m_NumVertices = tempVertices.size();
+	m_Vertices = new Vertex3D[m_NumVertices];
+	for (unsigned int i = 0; i < m_NumVertices; i++) {
+		m_Vertices[i] = tempVertices[i];
 	}
 
-	indices = new GLuint[tempIndices.size()];
-	for (unsigned int i = 0; i < tempIndices.size(); i++) {
-		indices[i] = tempIndices[i];
+	m_NumIndices = tempIndices.size();
+	m_Indices = new GLuint[m_NumIndices];
+	for (unsigned int i = 0; i < m_NumIndices; i++) {
+		m_Indices[i] = tempIndices[i];
 	}
 }
 
 void MC::Mesh3D::UnloadFromRAM()
 {
-	delete[] vertices;
-	delete[] indices;
+	delete[] m_Vertices;
+	delete[] m_Indices;
+	m_Vertices = nullptr;
+	m_Indices = nullptr;
 }
 
 void MC::Mesh3D::LoadToVRAM()
 {
 	UnloadFromVRAM();
 	
-	glGenBuffers(1, &vramHandleVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, vramHandleVBO);
-	glBufferData(GL_ARRAY_BUFFER, VertexBufferSize(), vertices, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_VRAMHandleVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VRAMHandleVBO);
+	glBufferData(GL_ARRAY_BUFFER, VertexBufferSize(), m_Vertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
@@ -140,9 +151,9 @@ void MC::Mesh3D::LoadToVRAM()
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 5));
 
-	glGenBuffers(1, &vramHandleIBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vramHandleIBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, IndexBufferSize(), indices, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_VRAMHandleIBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VRAMHandleIBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, IndexBufferSize(), m_Indices, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -151,11 +162,42 @@ void MC::Mesh3D::LoadToVRAM()
 
 void MC::Mesh3D::UnloadFromVRAM()
 {
-	if (vramHandleVBO != 0) {
-		glDeleteBuffers(1, &vramHandleVBO);
-		glDeleteBuffers(1, &vramHandleIBO);
+	if (m_VRAMHandleVBO != 0) {
+		glDeleteBuffers(1, &m_VRAMHandleVBO);
+		glDeleteBuffers(1, &m_VRAMHandleIBO);
 
-		vramHandleVBO = 0;
-		vramHandleIBO = 0;
+		m_VRAMHandleVBO = 0;
+		m_VRAMHandleIBO = 0;
 	}
+}
+
+MC::Vertex3D* MC::Mesh3D::GetVertices()
+{
+	return m_Vertices;
+}
+
+GLuint MC::Mesh3D::GetNumVertices()
+{
+	return m_NumVertices;
+}
+
+GLuint* MC::Mesh3D::GetIndices()
+{
+	return m_Indices;
+}
+
+GLuint MC::Mesh3D::GetNumIndices()
+{
+	return m_NumIndices;
+}
+
+bool MC::Mesh3D::HasFakeUser()
+{
+	return m_FakeUser;
+}
+
+void MC::Mesh3D::Unbind()
+{
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

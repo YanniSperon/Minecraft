@@ -2,24 +2,42 @@
 
 MC::Mesh3DManager::Mesh3DManager()
 {
-	meshes = std::unordered_map<std::string, Mesh3D*>();
+	m_Meshes = std::unordered_map<std::string, std::shared_ptr<Mesh3D>>();
 }
 
 MC::Mesh3DManager::~Mesh3DManager()
 {
-	for (auto& it : meshes) {
-		delete it.second;
-	}
-	meshes.clear();
+	m_Meshes.clear();
 }
 
-MC::Mesh3D* MC::Mesh3DManager::GetMesh(const std::string& name)
+std::shared_ptr<MC::Mesh3D> MC::Mesh3DManager::GetMesh(const std::string& name)
 {
-	if (meshes.find(name) != meshes.end()) {
-		return meshes[name];
+	if (m_Meshes.find(name) != m_Meshes.end()) {
+		return m_Meshes[name];
 	}
 	else {
-		meshes[name] = new Mesh3D(name, true);
-		return meshes[name];
+		m_Meshes[name] = std::make_shared<Mesh3D>(name, true);
+		return m_Meshes[name];
 	}
+}
+
+void MC::Mesh3DManager::Cleanup()
+{
+	if (m_ShouldCleanup) {
+		auto it = m_Meshes.begin();
+		while (it != m_Meshes.end()) {
+			if (it->second.unique() && !it->second->HasFakeUser()) {
+				it = m_Meshes.erase(it);
+			}
+			else {
+				it++;
+			}
+		}
+		m_ShouldCleanup = false;
+	}
+}
+
+void MC::Mesh3DManager::MarkForCleanup()
+{
+	m_ShouldCleanup = true;
 }

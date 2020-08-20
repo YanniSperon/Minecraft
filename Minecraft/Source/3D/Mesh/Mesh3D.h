@@ -8,16 +8,20 @@
 namespace MC {
 	class Mesh3D{
 	private:
-		Vertex3D* vertices;
-		GLuint numVertices;
-		GLuint* indices;
-		GLuint numIndices;
-		GLuint vramHandleVBO;
-		GLuint vramHandleIBO;
+		Vertex3D* m_Vertices;
+		GLuint m_NumVertices;
+		GLuint* m_Indices;
+		GLuint m_NumIndices;
+		GLuint m_VRAMHandleVBO;
+		GLuint m_VRAMHandleIBO;
+
+		bool m_FakeUser;
 	public:
-		Mesh3D();
-		Mesh3D(const std::string& pathToModel, bool shouldLoadToVRAM);
+		Mesh3D(const std::string& pathToModel, bool shouldLoadToVRAM = true);
 		~Mesh3D();
+
+		void Bind();
+		void Draw();
 
 		GLsizeiptr VertexBufferSize();
 		GLsizeiptr IndexBufferSize();
@@ -26,5 +30,14 @@ namespace MC {
 		void UnloadFromRAM();
 		void LoadToVRAM();
 		void UnloadFromVRAM();
+
+		Vertex3D* GetVertices();
+		GLuint GetNumVertices();
+		GLuint* GetIndices();
+		GLuint GetNumIndices();
+
+		bool HasFakeUser();
+
+		static void Unbind();
 	};
 }

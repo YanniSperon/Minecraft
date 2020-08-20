@@ -3,13 +3,17 @@
 #include "Devices.h"
 #include "GUI/GUI.h"
 #include "Global.h"
+#include "3D/Object/Object3D.h"
 
 #include <glew.h>
 #include <glfw3.h>
 #include <chrono>
+#include <memory>
 
 #include "Vendor/ImGui/imgui.h"
 #include "Vendor/ImGui/imgui_impl_glfw_gl3.h"
+//#include "Vendor/glm/gtx/quaternion.hpp"
+#include "Vendor/glm/gtc/matrix_transform.hpp"
 
 using namespace MC;
 
@@ -26,13 +30,12 @@ int main() {
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     bool shouldDisplayDebugInfo = true;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Global::GetMeshManager().GetMesh("Resources/Block.obj");
-    //Mesh3D* 
+    std::unique_ptr<Object3D> cube = std::make_unique<Object3D>("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,6 +61,14 @@ int main() {
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_RIGHT_CONTROL] && Global::GetKeyboardInput().m_KeysHeld[MC_KEY_0]) {
             Global::GetConfig().Save();
         }
+        if (Global::GetKeyboardInput().m_KeysPressed[MC_KEY_LEFT_CONTROL]) {
+            glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        if (Global::GetKeyboardInput().m_KeysReleased[MC_KEY_LEFT_CONTROL]) {
+            glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+        Console::Success("%f", Global::GetMouseInput().m_MouseX);
+        Console::Success("%f", Global::GetMouseInput().m_MouseY);
 
         //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -65,6 +76,28 @@ int main() {
 
         //////////////////////////////////////////////////////////////////////////////////////////////
 
+        // Render game here
+        glm::mat4 cameraMatrix = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 projectionMatrix = glm::perspective(glm::radians(90.0f), (float)Global::GetWindow().GetWidth() / (float)Global::GetWindow().GetHeight(), 0.1f, 100.0f);
+        cube->SetTranslation(glm::vec3(0.0f, 0.0f, -5.0f));
+        //for (int i = 0; i < cube->GetMesh()->GetNumVertices(); i++) {
+        //    Console::Warning("Vertex %i", i);
+        //    Console::Warning("    Pos: (%f, %f, %f)", cube->GetMesh()->GetVertices()[i].position.x, cube->GetMesh()->GetVertices()[i].position.y, cube->GetMesh()->GetVertices()[i].position.z);
+        //    Console::Warning("    Tex: (%f, %f)", cube->GetMesh()->GetVertices()[i].texCoord.x, cube->GetMesh()->GetVertices()[i].position.y);
+        //    Console::Warning("    Nor: (%f, %f, %f)", cube->GetMesh()->GetVertices()[i].normal.x, cube->GetMesh()->GetVertices()[i].normal.y, cube->GetMesh()->GetVertices()[i].normal.z);
+        //}
+        //
+        //for (int i = 0; i < cube->GetMesh()->GetNumVertices(); i++) {
+        //    Console::Warning("Index %i", i);
+        //    Console::Warning("    Value: (%i)", cube->GetMesh()->GetIndices()[i]);
+        //}
+        
+        //cube->GetMesh()->;
+        cube->Draw(projectionMatrix, cameraMatrix, glm::mat4());
+
+        //////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Render GUI here
         ImGui_ImplGlfwGL3_NewFrame();
         if (shouldDisplayDebugInfo) {
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -109,6 +142,9 @@ int main() {
         //////////////////////////////////////////////////////////////////////////////////////////////
 
         Input::Flush(Global::GetKeyboardInput(), Global::GetMouseInput());
+        Global::GetMesh3DManager().Cleanup();
+        Global::GetTextureManager().Cleanup();
+        Global::GetShaderManager().Cleanup();
 
         //////////////////////////////////////////////////////////////////////////////////////////////
     }

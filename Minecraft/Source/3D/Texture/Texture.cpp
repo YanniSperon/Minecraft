@@ -4,20 +4,20 @@
 #include "Vendor/stb/stb_image.h"
 
 MC::Texture::Texture(const std::string& name)
-	: ID(0)
+	: m_ID(0)
 {
 	LoadTexture(name);
 }
 
 MC::Texture::~Texture()
 {
-	glDeleteTextures(1, &ID);
+	glDeleteTextures(1, &m_ID);
 }
 
 void MC::Texture::LoadTexture(const std::string& name)
 {
-	glGenTextures(1, &ID);
-	glBindTexture(GL_TEXTURE_2D, ID);
+	glGenTextures(1, &m_ID);
+	glBindTexture(GL_TEXTURE_2D, m_ID);
 	stbi_set_flip_vertically_on_load(1);
 
 	int width, height, nrChannels;
@@ -41,12 +41,17 @@ void MC::Texture::LoadTexture(const std::string& name)
 
 void MC::Texture::Bind()
 {
-	glBindTexture(GL_TEXTURE_2D, ID);
+	glBindTexture(GL_TEXTURE_2D, m_ID);
 }
 
 GLuint MC::Texture::GetID()
 {
-	return ID;
+	return m_ID;
+}
+
+bool MC::Texture::HasFakeUser()
+{
+	return m_FakeUser;
 }
 
 void MC::Texture::Unbind()

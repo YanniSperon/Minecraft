@@ -20,13 +20,13 @@ void Global::Initialize()
 	g_SystemStartTime = std::chrono::high_resolution_clock::now();
 	g_MCVersion = "1.0.0";
 
-	g_Config = std::unique_ptr<Config>(new Config());
-	g_Window = std::unique_ptr<MC::Window>(new MC::Window());
-	g_KeyboardInput = std::unique_ptr<MC::KeyboardInput>(new MC::KeyboardInput());
-	g_MouseInput = std::unique_ptr<MC::MouseInput>(new MC::MouseInput());
-	g_Mesh3DManager = std::unique_ptr<MC::Mesh3DManager>(new MC::Mesh3DManager());
-	g_ShaderManager = std::unique_ptr<MC::ShaderManager>(new MC::ShaderManager());
-	g_TextureManager = std::unique_ptr<MC::TextureManager>(new MC::TextureManager());
+	g_Config = std::make_unique<Config>();
+	g_Window = std::make_unique<MC::Window>();
+	g_KeyboardInput = std::make_unique<MC::KeyboardInput>();
+	g_MouseInput = std::make_unique<MC::MouseInput>();
+	g_Mesh3DManager = std::make_unique<MC::Mesh3DManager>();
+	g_ShaderManager = std::make_unique<MC::ShaderManager>();
+	g_TextureManager = std::make_unique<MC::TextureManager>();
 }
 
 std::chrono::steady_clock::time_point& Global::GetStartTime()
