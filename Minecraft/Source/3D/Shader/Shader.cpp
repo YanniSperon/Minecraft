@@ -6,7 +6,7 @@
 #include <sstream>
 
 MC::Shader::Shader(const std::string& name)
-    : m_ID(0)
+    : m_ID(0), m_FakeUser(false)
 {
     std::string geometryPath = name + std::string(".geom");
     std::string fragmentPath = name + std::string(".frag");
@@ -16,6 +16,7 @@ MC::Shader::Shader(const std::string& name)
 MC::Shader::~Shader()
 {
     glDeleteProgram(m_ID);
+    Console::Warning("Deleted shader");
 }
 
 void MC::Shader::LoadShader(const char* geometryShaderPath, const char* fragmentShaderPath)
@@ -154,7 +155,12 @@ GLuint MC::Shader::GetID()
     return m_ID;
 }
 
-bool MC::Shader::HasFakeUser()
+void MC::Shader::SetHasFakeUser(bool fakeUser)
+{
+    m_FakeUser = fakeUser;
+}
+
+bool MC::Shader::GetHasFakeUser()
 {
     return m_FakeUser;
 }

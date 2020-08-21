@@ -6,6 +6,7 @@ private:
 	int m_StartingHeight;
 	bool m_HasVSync;
 	float m_FOV;
+	float m_MouseSensitivity;
 	bool m_HasSmoothLighting;
 	int m_RenderDistance;
 	int m_ParticleQuality;
@@ -20,6 +21,7 @@ public:
 	int GetStartingHeight();
 	bool GetHasVSync();
 	float GetFOV();
+	float GetMouseSensitivity();
 	bool GetHasSmoothLighting();
 	int GetRenderDistance();
 	int GetParticleQuality();
@@ -28,7 +30,8 @@ public:
 	void SetStartingWidth(int width);
 	void SetStartingHeight(int height);
 	void SetHasVSync(bool hasVSync);
-	void SetFOV(float fov);
+	void SetFOV(float FOV);
+	void SetMouseSensitivity(float mouseSensitivity);
 	void SetHasSmoothLighting(bool hasSmoothLighting);
 	void SetRenderDistance(int renderDistance);
 	void SetParticleQuality(int particleQuality);

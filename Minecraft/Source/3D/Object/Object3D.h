@@ -38,7 +38,7 @@ namespace MC {
 		void AddRotation(const glm::vec3& rotation);
 		void AddScale(const glm::vec3& scale);
 
-		const glm::mat4& GetTransformationMatrix();
+		glm::mat4 GetTransformationMatrix();
 
 		void Bind();
 

@@ -1,11 +1,12 @@
 #include "Object3D.h"
 #include "Global.h"
+#include "Console.h"
 
 #include "Vendor/glm/gtc/matrix_transform.hpp"
 #include "Vendor/glm/gtx/euler_angles.hpp"
 
 MC::Object3D::Object3D(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath)
-	: m_Mesh(Global::GetMesh3DManager().GetMesh(meshPath)), m_Shader(Global::GetShaderManager().GetShader(shaderPath)), m_Texture(Global::GetTextureManager().GetTexture(texturePath)), m_Translation(0.0f, 0.0f, 0.0f), m_Rotation(0.0f, 0.0f, 0.0f), m_Scale(1.0f, 1.0f, 1.0f)
+	: m_Mesh(Global::GetMesh3DManager().GetMesh(meshPath)), m_Shader(Global::GetShaderManager().GetShader(shaderPath)), m_Texture(Global::GetTextureManager().GetTexture(texturePath)), m_Translation(0.0f), m_Rotation(0.0f), m_Scale(1.0f)
 {
 
 }
@@ -77,9 +78,9 @@ void MC::Object3D::AddScale(const glm::vec3& scale)
 	m_Scale += scale;
 }
 
-const glm::mat4& MC::Object3D::GetTransformationMatrix()
+glm::mat4 MC::Object3D::GetTransformationMatrix()
 {
-	return (glm::translate(glm::mat4(), m_Translation) * glm::yawPitchRoll(glm::radians(m_Rotation.x), glm::radians(m_Rotation.y), glm::radians(m_Rotation.z)) * glm::scale(glm::mat4(), m_Scale));
+	return glm::translate(glm::mat4(1.0f), m_Translation) * glm::yawPitchRoll(glm::radians(m_Rotation.x), glm::radians(m_Rotation.y), glm::radians(m_Rotation.z)) * glm::scale(glm::mat4(1.0f), m_Scale);
 }
 
 void MC::Object3D::Bind()

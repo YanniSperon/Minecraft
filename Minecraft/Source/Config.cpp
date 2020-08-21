@@ -17,7 +17,7 @@
 //    4    =  very high =      4096x4096
 
 Config::Config()
-	: m_StartingWidth(1280), m_StartingHeight(720), m_HasVSync(0), m_FOV(70.0f), m_HasSmoothLighting(1), m_RenderDistance(16), m_ParticleQuality(2), m_ShadowQuality(2)
+	: m_StartingWidth(1280), m_StartingHeight(720), m_HasVSync(0), m_FOV(70.0f), m_MouseSensitivity(0.2f), m_HasSmoothLighting(1), m_RenderDistance(16), m_ParticleQuality(2), m_ShadowQuality(2)
 {
 	Load();
 }
@@ -31,6 +31,7 @@ void Config::Save()
 		configFile << "StartingHeight=" << m_StartingHeight << "\n";
 		configFile << "VSync=" << m_HasVSync << "\n";
 		configFile << "FOV=" << m_FOV << "\n";
+		configFile << "MouseSensitivity=" << m_MouseSensitivity << "\n";
 		configFile << "HasSmoothLighting=" << m_HasSmoothLighting << "\n";
 		configFile << "RenderDistance=" << m_RenderDistance << "\n";
 		configFile << "ParticleQuality=" << m_ParticleQuality << "\n";
@@ -66,6 +67,10 @@ void Config::Load()
 			else if (line.find("FOV=") != std::string::npos && line.length() > 4) {
 				std::string value = line.substr(4);
 				m_FOV = std::stof(value);
+			}
+			else if (line.find("MouseSensitivity=") != std::string::npos && line.length() > 17) {
+				std::string value = line.substr(17);
+				m_MouseSensitivity = std::stof(value);
 			}
 			else if (line.find("HasSmoothLighting=") != std::string::npos && line.length() > 18) {
 				std::string value = line.substr(18);
@@ -112,6 +117,11 @@ float Config::GetFOV()
 	return m_FOV;
 }
 
+float Config::GetMouseSensitivity()
+{
+	return m_MouseSensitivity;
+}
+
 bool Config::GetHasSmoothLighting()
 {
 	return m_HasSmoothLighting;
@@ -150,9 +160,15 @@ void Config::SetHasVSync(bool hasVSync)
 	Save();
 }
 
-void Config::SetFOV(float fov)
+void Config::SetFOV(float FOV)
 {
-	m_FOV = fov;
+	m_FOV = FOV;
+	Save();
+}
+
+void Config::SetMouseSensitivity(float mouseSensitivity)
+{
+	m_MouseSensitivity = mouseSensitivity;
 	Save();
 }
 

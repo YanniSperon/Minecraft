@@ -95,7 +95,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\3D\Camera.h" />
+    <ClInclude Include="Source\3D\Scene\Camera.h" />
     <ClInclude Include="Source\3D\Mesh\Mesh3D.h" />
     <ClInclude Include="Source\3D\Mesh\Mesh3DManager.h" />
     <ClInclude Include="Source\3D\Object\Object3D.h" />
@@ -103,7 +103,6 @@
     <ClInclude Include="Source\3D\Shader\Shader.h" />
     <ClInclude Include="Source\3D\Texture\Texture.h" />
     <ClInclude Include="Source\3D\Texture\TextureManager.h" />
-    <ClInclude Include="Source\3D\Vertex3D.h" />
     <ClInclude Include="Source\Config.h" />
     <ClInclude Include="Source\Console.h" />
     <ClInclude Include="Source\Devices.h" />
@@ -403,6 +402,7 @@
     <ClInclude Include="Source\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\3D\Scene\Camera.cpp" />
     <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp" />
     <ClCompile Include="Source\3D\Mesh\Mesh3DManager.cpp" />
     <ClCompile Include="Source\3D\Object\Object3D.cpp" />

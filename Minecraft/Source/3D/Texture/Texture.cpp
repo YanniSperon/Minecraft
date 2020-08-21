@@ -4,7 +4,7 @@
 #include "Vendor/stb/stb_image.h"
 
 MC::Texture::Texture(const std::string& name)
-	: m_ID(0)
+	: m_ID(0), m_FakeUser(false)
 {
 	LoadTexture(name);
 }
@@ -12,6 +12,7 @@ MC::Texture::Texture(const std::string& name)
 MC::Texture::~Texture()
 {
 	glDeleteTextures(1, &m_ID);
+	Console::Warning("Deleted texture");
 }
 
 void MC::Texture::LoadTexture(const std::string& name)
@@ -49,7 +50,12 @@ GLuint MC::Texture::GetID()
 	return m_ID;
 }
 
-bool MC::Texture::HasFakeUser()
+void MC::Texture::SetHasFakeUser(bool fakeUser)
+{
+	m_FakeUser = fakeUser;
+}
+
+bool MC::Texture::GetHasFakeUser()
 {
 	return m_FakeUser;
 }

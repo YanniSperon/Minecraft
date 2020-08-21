@@ -18,6 +18,8 @@ namespace MC {
 
 		std::shared_ptr<Mesh3D> GetMesh(const std::string& name);
 
+		std::unordered_map<std::string, std::shared_ptr<Mesh3D>>& GetManagedMesh3Ds();
+
 		void Cleanup();
 
 		void MarkForCleanup();

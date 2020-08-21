@@ -1,17 +1,24 @@
 #pragma once
 
-#include "3D/Vertex3D.h"
-
 #include <glew.h>
 #include <string>
 
+#include "Vendor/glm/glm.hpp"
+
 namespace MC {
+	struct Vertex3D {
+		glm::vec3 position;
+		glm::vec2 texCoord;
+		glm::vec3 normal;
+	};
+
 	class Mesh3D{
 	private:
 		Vertex3D* m_Vertices;
 		GLuint m_NumVertices;
 		GLuint* m_Indices;
 		GLuint m_NumIndices;
+		GLuint m_VRAMHandleVAO;
 		GLuint m_VRAMHandleVBO;
 		GLuint m_VRAMHandleIBO;
 
@@ -36,7 +43,8 @@ namespace MC {
 		GLuint* GetIndices();
 		GLuint GetNumIndices();
 
-		bool HasFakeUser();
+		void SetHasFakeUser(bool fakeUser);
+		bool GetHasFakeUser();
 
 		static void Unbind();
 	};

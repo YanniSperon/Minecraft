@@ -55,7 +55,7 @@ void MC::GUI::PlaceTextLeft(const char* fmt, ...)
     va_list args;
     va_start(args, fmt);
     char* txt = new char[1024];
-    vsprintf(txt, fmt, args);
+    vsnprintf(txt, 1024, fmt, args);
     std::string returnValue = std::string(txt);
     LeftHorizontalAlignText(GUI_INDENTATION_SIZE);
     ImGui::Text("%s", returnValue.c_str());
@@ -68,7 +68,7 @@ void MC::GUI::PlaceTextCenter(const char* fmt, ...)
     va_list args;
     va_start(args, fmt);
     char* txt = new char[1024];
-    vsprintf(txt, fmt, args);
+    vsnprintf(txt, 1024, fmt, args);
     std::string returnValue = std::string(txt);
     GUI::CenterHorizontalAlignText(returnValue);
     ImGui::Text("%s", returnValue.c_str());
@@ -81,7 +81,7 @@ void MC::GUI::PlaceTextRight(const char* fmt, ...)
     va_list args;
     va_start(args, fmt);
     char* txt = new char[1024];
-    vsprintf(txt, fmt, args);
+    vsnprintf(txt, 1024, fmt, args);
     std::string returnValue = std::string(txt);
     GUI::RightHorizontalAlignText(returnValue, GUI_INDENTATION_SIZE);
     ImGui::Text("%s", returnValue.c_str());

@@ -17,19 +17,17 @@ MC::Window::Window()
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
         //////////////////////////////////////////////////////////////////////////////////////////////
         m_Window = glfwCreateWindow(m_Width, m_Height, "Minecraft", NULL, NULL);
-        if (m_Window) {
-            Console::Info("Succeeded creation");
-        }
-        else {
-            Console::Info("Failed creation");
-        }
-        //Console::Assert(!m_Window, "Failed Window Creation!");
+        Console::Assert(m_Window, "Failed Window Creation!");
         glfwMakeContextCurrent(m_Window);
         //////////////////////////////////////////////////////////////////////////////////////////////
         GLenum err = glewInit();
         Console::Assert(err == GLEW_OK, "Failed GLEW Initialization - %s", reinterpret_cast<char const*>(glewGetErrorString(err)));
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEPTH_TEST);
+        glDebugMessageCallback(Window::GLDebugMessageCallback, 0);
         //////////////////////////////////////////////////////////////////////////////////////////////
         glfwSetCursorPosCallback(m_Window, Input::MousePositionCallback);
         glfwSetKeyCallback(m_Window, Input::KeyCallback);
@@ -99,6 +97,25 @@ void MC::Window::WindowSizeCallback(GLFWwindow* window, int width, int height)
 {
     Global::GetWindow().SetWidth(width);
     Global::GetWindow().SetHeight(height);
+}
+
+void GLAPIENTRY MC::Window::GLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+{
+    switch (severity)
+    {
+    case GL_DEBUG_SEVERITY_HIGH:
+        Console::FatalError("GL CALLBACK:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
+        break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+        Console::Error("GL CALLBACK:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
+        break;
+    case GL_DEBUG_SEVERITY_LOW:
+        Console::Warning("GL CALLBACK:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
+        break;
+    case GL_DEBUG_SEVERITY_NOTIFICATION:
+        Console::Info("GL NOTIFICATION:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
+        break;
+    }
 }
 
 void MC::Window::PollEvents()

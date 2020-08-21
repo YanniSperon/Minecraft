@@ -10,7 +10,7 @@
 #include <strstream>
 
 MC::Mesh3D::Mesh3D(const std::string& pathToModel, bool shouldLoadToVRAM)
-	: m_Vertices(nullptr), m_NumVertices(0), m_Indices(nullptr), m_NumIndices(0), m_VRAMHandleVBO(0), m_VRAMHandleIBO(0)
+	: m_Vertices(nullptr), m_NumVertices(0), m_Indices(nullptr), m_NumIndices(0), m_VRAMHandleVBO(0), m_VRAMHandleIBO(0), m_FakeUser(false)
 {
 	LoadToRAM(pathToModel);
 	if (shouldLoadToVRAM) {
@@ -22,14 +22,12 @@ MC::Mesh3D::~Mesh3D()
 {
 	UnloadFromRAM();
 	UnloadFromVRAM();
+	Console::Warning("Deleted mesh");
 }
 
 void MC::Mesh3D::Bind()
 {
-	glBindBuffer(GL_ARRAY_BUFFER, m_VRAMHandleVBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 3));
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 5));
+	glBindVertexArray(m_VRAMHandleVAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VRAMHandleIBO);
 }
 
@@ -140,6 +138,9 @@ void MC::Mesh3D::LoadToVRAM()
 {
 	UnloadFromVRAM();
 	
+	glGenVertexArrays(1, &m_VRAMHandleVAO);
+	glBindVertexArray(m_VRAMHandleVAO);
+
 	glGenBuffers(1, &m_VRAMHandleVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VRAMHandleVBO);
 	glBufferData(GL_ARRAY_BUFFER, VertexBufferSize(), m_Vertices, GL_STATIC_DRAW);
@@ -191,7 +192,12 @@ GLuint MC::Mesh3D::GetNumIndices()
 	return m_NumIndices;
 }
 
-bool MC::Mesh3D::HasFakeUser()
+void MC::Mesh3D::SetHasFakeUser(bool fakeUser)
+{
+	m_FakeUser = fakeUser;
+}
+
+bool MC::Mesh3D::GetHasFakeUser()
 {
 	return m_FakeUser;
 }

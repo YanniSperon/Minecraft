@@ -1,4 +1,5 @@
 #include "ShaderManager.h"
+#include "Console.h"
 
 MC::ShaderManager::ShaderManager()
 {
@@ -21,12 +22,17 @@ std::shared_ptr<MC::Shader> MC::ShaderManager::GetShader(const std::string& name
 	}
 }
 
+std::unordered_map<std::string, std::shared_ptr<MC::Shader>>& MC::ShaderManager::GetManagedShaders()
+{
+	return m_Shaders;
+}
+
 void MC::ShaderManager::Cleanup()
 {
 	if (m_ShouldCleanup) {
 		auto it = m_Shaders.begin();
 		while (it != m_Shaders.end()) {
-			if (it->second.unique() && !it->second->HasFakeUser()) {
+			if (it->second.unique() && !it->second->GetHasFakeUser()) {
 				it = m_Shaders.erase(it);
 			}
 			else {

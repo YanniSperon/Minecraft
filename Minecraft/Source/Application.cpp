@@ -4,16 +4,16 @@
 #include "GUI/GUI.h"
 #include "Global.h"
 #include "3D/Object/Object3D.h"
+#include "3D/Scene/Camera.h"
 
 #include <glew.h>
 #include <glfw3.h>
 #include <chrono>
 #include <memory>
 
+#include "Vendor/glm/glm.hpp"
 #include "Vendor/ImGui/imgui.h"
 #include "Vendor/ImGui/imgui_impl_glfw_gl3.h"
-//#include "Vendor/glm/gtx/quaternion.hpp"
-#include "Vendor/glm/gtc/matrix_transform.hpp"
 
 using namespace MC;
 
@@ -34,27 +34,29 @@ int main() {
     bool shouldDisplayDebugInfo = true;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-
+    
     std::unique_ptr<Object3D> cube = std::make_unique<Object3D>("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
+    std::unique_ptr<Camera> camera = std::make_unique<Camera>();
+    camera->SetRotation(glm::vec3(45.0f, 45.0f, 0.0f));
+    glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     while (!Global::GetWindow().ShouldCloseWindow())
     {
         //////////////////////////////////////////////////////////////////////////////////////////////
-
         currentTime = std::chrono::high_resolution_clock::now();
         auto deltaTimeNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime);
         lastTime = currentTime;
-        double deltaTime = deltaTimeNanoseconds.count() / 1000000000.0 * timeConstant;
-
+        double deltaTime = deltaTimeNanoseconds.count() / 1000000000.0;
+        double deltaTimeWithTimeFactor = deltaTime * timeConstant;
         //////////////////////////////////////////////////////////////////////////////////////////////
-
         Global::GetWindow().PollEvents();
         Input::ProcessEvents(Global::GetKeyboardInput(), Global::GetMouseInput());
-        
         //////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        // PROCESS INPUT
         if (Global::GetKeyboardInput().m_KeysPressed[MC_KEY_F3]) {
             shouldDisplayDebugInfo = !shouldDisplayDebugInfo;
         }
@@ -62,42 +64,50 @@ int main() {
             Global::GetConfig().Save();
         }
         if (Global::GetKeyboardInput().m_KeysPressed[MC_KEY_LEFT_CONTROL]) {
-            glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        }
-        if (Global::GetKeyboardInput().m_KeysReleased[MC_KEY_LEFT_CONTROL]) {
             glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
-        Console::Success("%f", Global::GetMouseInput().m_MouseX);
-        Console::Success("%f", Global::GetMouseInput().m_MouseY);
+        if (Global::GetKeyboardInput().m_KeysReleased[MC_KEY_LEFT_CONTROL]) {
+            glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_W] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_W]) {
+            camera->MoveForward(deltaTime);
+        }
+        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_A] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_A]) {
+            camera->StrafeLeft(deltaTime);
+        }
+        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_S] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_S]) {
+            camera->MoveBackward(deltaTime);
+        }
+        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_D] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_D]) {
+            camera->StrafeRight(deltaTime);
+        }
+        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_LEFT_SHIFT] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_LEFT_SHIFT]) {
+            camera->MoveDown(deltaTime);
+        }
+        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_SPACE] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_SPACE]) {
+            camera->MoveUp(deltaTime);
+        }
+        //camera->SetUpDirection(glm::vec3(0.0f, -1.0f, 0.0f));
+        Console::Info("Player rotation (%f, %f, %f)", camera->GetRotation().x, camera->GetRotation().y, camera->GetRotation().z);
+        camera->LookAtMouse(Global::GetConfig().GetMouseSensitivity(), Global::GetMouseInput().m_MouseX, Global::GetMouseInput().m_MouseY);
+        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_E]) {
+            camera->LookAt(glm::vec3(0.0f, 0.0f, -5.0f));
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////
-
         Global::GetWindow().ClearBuffer();
-
         //////////////////////////////////////////////////////////////////////////////////////////////
 
-        // Render game here
-        glm::mat4 cameraMatrix = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 projectionMatrix = glm::perspective(glm::radians(90.0f), (float)Global::GetWindow().GetWidth() / (float)Global::GetWindow().GetHeight(), 0.1f, 100.0f);
+
+        // RENDER 3D
         cube->SetTranslation(glm::vec3(0.0f, 0.0f, -5.0f));
-        //for (int i = 0; i < cube->GetMesh()->GetNumVertices(); i++) {
-        //    Console::Warning("Vertex %i", i);
-        //    Console::Warning("    Pos: (%f, %f, %f)", cube->GetMesh()->GetVertices()[i].position.x, cube->GetMesh()->GetVertices()[i].position.y, cube->GetMesh()->GetVertices()[i].position.z);
-        //    Console::Warning("    Tex: (%f, %f)", cube->GetMesh()->GetVertices()[i].texCoord.x, cube->GetMesh()->GetVertices()[i].position.y);
-        //    Console::Warning("    Nor: (%f, %f, %f)", cube->GetMesh()->GetVertices()[i].normal.x, cube->GetMesh()->GetVertices()[i].normal.y, cube->GetMesh()->GetVertices()[i].normal.z);
-        //}
-        //
-        //for (int i = 0; i < cube->GetMesh()->GetNumVertices(); i++) {
-        //    Console::Warning("Index %i", i);
-        //    Console::Warning("    Value: (%i)", cube->GetMesh()->GetIndices()[i]);
-        //}
-        
-        //cube->GetMesh()->;
-        cube->Draw(projectionMatrix, cameraMatrix, glm::mat4());
+        cube->Draw(camera->GetProjectionMatrix(), camera->GetViewMatrix(), glm::mat4(1.0f));
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////
 
-        // Render GUI here
+
+        // RENDER GUI
         ImGui_ImplGlfwGL3_NewFrame();
         if (shouldDisplayDebugInfo) {
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -135,17 +145,14 @@ int main() {
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
 
+        //////////////////////////////////////////////////////////////////////////////////////////////
         Global::GetWindow().SwapBuffers();
-
         //////////////////////////////////////////////////////////////////////////////////////////////
-
         Input::Flush(Global::GetKeyboardInput(), Global::GetMouseInput());
         Global::GetMesh3DManager().Cleanup();
         Global::GetTextureManager().Cleanup();
         Global::GetShaderManager().Cleanup();
-
         //////////////////////////////////////////////////////////////////////////////////////////////
     }
 

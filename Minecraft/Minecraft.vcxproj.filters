@@ -39,9 +39,6 @@
     <ClInclude Include="Source\3D\Mesh\Mesh3D.h">
       <Filter>3D\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Source\3D\Vertex3D.h">
-      <Filter>3D</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Config.h" />
     <ClInclude Include="Source\Console.h" />
     <ClInclude Include="Source\Devices.h" />
@@ -927,7 +924,7 @@
     <ClInclude Include="Source\Vendor\stb\stb_image.h" />
     <ClInclude Include="Source\3D\Texture\TextureManager.h" />
     <ClInclude Include="Source\3D\Object\Object3D.h" />
-    <ClInclude Include="Source\3D\Camera.h" />
+    <ClInclude Include="Source\3D\Scene\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp">
@@ -970,5 +967,6 @@
     <ClCompile Include="Source\3D\Texture\Texture.cpp" />
     <ClCompile Include="Source\3D\Texture\TextureManager.cpp" />
     <ClCompile Include="Source\3D\Object\Object3D.cpp" />
+    <ClCompile Include="Source\3D\Scene\Camera.cpp" />
   </ItemGroup>
 </Project>

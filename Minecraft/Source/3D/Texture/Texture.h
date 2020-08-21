@@ -19,7 +19,8 @@ namespace MC {
 
 		GLuint GetID();
 
-		bool HasFakeUser();
+		void SetHasFakeUser(bool fakeUser);
+		bool GetHasFakeUser();
 
 		static void Unbind();
 	};

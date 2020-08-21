@@ -2,6 +2,7 @@
 
 #include "GUI/GUI.h"
 
+#include <glew.h>
 #include <glfw3.h>
 #include <memory>
 
@@ -28,6 +29,7 @@ namespace MC {
 		void ReplaceGUI(GUI* gui);
 
 		static void WindowSizeCallback(GLFWwindow* window, int width, int height);
+		static void GLAPIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 		void PollEvents();
 		void ClearBuffer();

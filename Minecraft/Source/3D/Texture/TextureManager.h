@@ -18,6 +18,8 @@ namespace MC {
 
 		std::shared_ptr<Texture> GetTexture(const std::string& name);
 
+		std::unordered_map<std::string, std::shared_ptr<Texture>>& GetManagedTextures();
+
 		void Cleanup();
 
 		void MarkForCleanup();

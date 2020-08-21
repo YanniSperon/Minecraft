@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include "Console.h"
 
 MC::TextureManager::TextureManager()
 {
@@ -21,12 +22,17 @@ std::shared_ptr<MC::Texture> MC::TextureManager::GetTexture(const std::string& n
 	}
 }
 
+std::unordered_map<std::string, std::shared_ptr<MC::Texture>>& MC::TextureManager::GetManagedTextures()
+{
+	return m_Textures;
+}
+
 void MC::TextureManager::Cleanup()
 {
 	if (m_ShouldCleanup) {
 		auto it = m_Textures.begin();
 		while (it != m_Textures.end()) {
-			if (it->second.unique() && !it->second->HasFakeUser()) {
+			if (it->second.unique() && !it->second->GetHasFakeUser()) {
 				it = m_Textures.erase(it);
 			}
 			else {

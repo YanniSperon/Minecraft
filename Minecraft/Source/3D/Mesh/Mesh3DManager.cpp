@@ -1,4 +1,5 @@
 #include "Mesh3DManager.h"
+#include "Console.h"
 
 MC::Mesh3DManager::Mesh3DManager()
 {
@@ -21,12 +22,17 @@ std::shared_ptr<MC::Mesh3D> MC::Mesh3DManager::GetMesh(const std::string& name)
 	}
 }
 
+std::unordered_map<std::string, std::shared_ptr<MC::Mesh3D>>& MC::Mesh3DManager::GetManagedMesh3Ds()
+{
+	return m_Meshes;
+}
+
 void MC::Mesh3DManager::Cleanup()
 {
 	if (m_ShouldCleanup) {
 		auto it = m_Meshes.begin();
 		while (it != m_Meshes.end()) {
-			if (it->second.unique() && !it->second->HasFakeUser()) {
+			if (it->second.unique() && !it->second->GetHasFakeUser()) {
 				it = m_Meshes.erase(it);
 			}
 			else {

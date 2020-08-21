@@ -28,16 +28,18 @@ void Console::Success(const char* fmt, ...)
 #ifdef _WIN32
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
 #endif
-	std::string timestampString = std::to_string(hours.count()) + ":" + std::to_string(minutes.count()) + ":" + std::to_string(seconds.count()) + "." + std::to_string(milliseconds.count()) + std::to_string(microseconds.count()) + " -- SUCCESS:      ";
+	char* timestamp = new char[256];
+	snprintf(timestamp, 256, "%02ld:%02ld:%02lld.%03lld%03lld --    SUCCESS:    ", hours.count(), minutes.count(), seconds.count(), milliseconds.count(), microseconds.count());
 	char* message = new char[1024];
-	vsprintf(message, fmt, args);
-	std::string returnValue = timestampString + std::string(message);
+	vsnprintf(message, 1024, fmt, args);
+	std::string returnValue = std::string(timestamp) + std::string(message);
 	printf("%s\n", returnValue.c_str());
 	Global::GetConsoleLog().push_back(returnValue);
 	if (Global::GetConsoleLog().size() > 50) {
 		Global::GetConsoleLog().erase(Global::GetConsoleLog().begin());
 	}
 	va_end(args);
+	delete[] timestamp;
 	delete[] message;
 	printMutex.unlock();
 }
@@ -57,16 +59,18 @@ void Console::Info(const char* fmt, ...)
 #ifdef _WIN32
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 #endif
-	std::string timestampString = std::to_string(hours.count()) + ":" + std::to_string(minutes.count()) + ":" + std::to_string(seconds.count()) + "." + std::to_string(milliseconds.count()) + std::to_string(microseconds.count()) + " -- INFO:         ";
+	char* timestamp = new char[256];
+	snprintf(timestamp, 256, "%02ld:%02ld:%02lld.%03lld%03lld --      INFO:     ", hours.count(), minutes.count(), seconds.count(), milliseconds.count(), microseconds.count());
 	char* message = new char[1024];
-	vsprintf(message, fmt, args);
-	std::string returnValue = timestampString + std::string(message);
+	vsnprintf(message, 1024, fmt, args);
+	std::string returnValue = std::string(timestamp) + std::string(message);
 	printf("%s\n", returnValue.c_str());
 	Global::GetConsoleLog().push_back(returnValue);
 	if (Global::GetConsoleLog().size() > 50) {
 		Global::GetConsoleLog().erase(Global::GetConsoleLog().begin());
 	}
 	va_end(args);
+	delete[] timestamp;
 	delete[] message;
 	printMutex.unlock();
 }
@@ -86,16 +90,18 @@ void Console::Warning(const char* fmt, ...)
 #ifdef _WIN32
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
 #endif
-	std::string timestampString = std::to_string(hours.count()) + ":" + std::to_string(minutes.count()) + ":" + std::to_string(seconds.count()) + "." + std::to_string(milliseconds.count()) + std::to_string(microseconds.count()) + " -- WARNING:      ";
+	char* timestamp = new char[256];
+	snprintf(timestamp, 256, "%02ld:%02ld:%02lld.%03lld%03lld --    WARNING:    ", hours.count(), minutes.count(), seconds.count(), milliseconds.count(), microseconds.count());
 	char* message = new char[1024];
-	vsprintf(message, fmt, args);
-	std::string returnValue = timestampString + std::string(message);
+	vsnprintf(message, 1024, fmt, args);
+	std::string returnValue = std::string(timestamp) + std::string(message);
 	printf("%s\n", returnValue.c_str());
 	Global::GetConsoleLog().push_back(returnValue);
 	if (Global::GetConsoleLog().size() > 50) {
 		Global::GetConsoleLog().erase(Global::GetConsoleLog().begin());
 	}
 	va_end(args);
+	delete[] timestamp;
 	delete[] message;
 	printMutex.unlock();
 }
@@ -115,16 +121,18 @@ void Console::Error(const char* fmt, ...)
 #ifdef _WIN32
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
 #endif
-	std::string timestampString = std::to_string(hours.count()) + ":" + std::to_string(minutes.count()) + ":" + std::to_string(seconds.count()) + "." + std::to_string(milliseconds.count()) + std::to_string(microseconds.count()) + " -- ERROR:        ";
+	char* timestamp = new char[256];
+	snprintf(timestamp, 256, "%02ld:%02ld:%02lld.%03lld%03lld --     ERROR:     ", hours.count(), minutes.count(), seconds.count(), milliseconds.count(), microseconds.count());
 	char* message = new char[1024];
-	vsprintf(message, fmt, args);
-	std::string returnValue = timestampString + std::string(message);
+	vsnprintf(message, 1024, fmt, args);
+	std::string returnValue = std::string(timestamp) + std::string(message);
 	printf("%s\n", returnValue.c_str());
 	Global::GetConsoleLog().push_back(returnValue);
 	if (Global::GetConsoleLog().size() > 50) {
 		Global::GetConsoleLog().erase(Global::GetConsoleLog().begin());
 	}
 	va_end(args);
+	delete[] timestamp;
 	delete[] message;
 	printMutex.unlock();
 }
@@ -144,16 +152,18 @@ void Console::FatalError(const char* fmt, ...)
 #ifdef _WIN32
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 79);
 #endif
-	std::string timestampString = std::to_string(hours.count()) + ":" + std::to_string(minutes.count()) + ":" + std::to_string(seconds.count()) + "." + std::to_string(milliseconds.count()) + std::to_string(microseconds.count()) + " -- FATAL ERROR:  ";
+	char* timestamp = new char[256];
+	snprintf(timestamp, 256, "%02ld:%02ld:%02lld.%03lld%03lld --  FATAL ERROR:  ", hours.count(), minutes.count(), seconds.count(), milliseconds.count(), microseconds.count());
 	char* message = new char[1024];
-	vsprintf(message, fmt, args);
-	std::string returnValue = timestampString + std::string(message);
+	vsnprintf(message, 1024, fmt, args);
+	std::string returnValue = std::string(timestamp) + std::string(message);
 	printf("%s\n", returnValue.c_str());
 	Global::GetConsoleLog().push_back(returnValue);
 	if (Global::GetConsoleLog().size() > 50) {
 		Global::GetConsoleLog().erase(Global::GetConsoleLog().begin());
 	}
 	va_end(args);
+	delete[] timestamp;
 	delete[] message;
 	printMutex.unlock();
 }
