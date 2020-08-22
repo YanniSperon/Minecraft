@@ -28,11 +28,21 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     bool shouldDisplayDebugInfo = true;
     //////////////////////////////////////////////////////////////////////////////////////////////
+    //Console::Info("Attempting to create 0 block");
+    //Object3D* bl = new Object3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
+    //Global::GetWindow().GetCurrentScene().GetObject3Ds().push_back(bl);
+    //Console::Info("Created 0 block");
+    //Console::Info("Attempting to create first block");
     Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
+    //Console::Info("Created first block");
     Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(0.0f, 0.0f, -5.0f));
+    //Console::Info("Moving first block");
     Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
     Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(3.0f, 0.0f, -5.0f));
+    //////////////////////////////////////////////////////////////////////////////////////////////
+
     glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     while (!Global::GetWindow().ShouldCloseWindow())

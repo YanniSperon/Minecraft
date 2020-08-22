@@ -9,7 +9,7 @@
 static bool s_InitializedGL = false;
 
 MC::Window::Window()
-    : m_Window(nullptr), m_Width(Global::GetConfig().GetStartingWidth()), m_Height(Global::GetConfig().GetStartingHeight()), m_GUI(nullptr)
+    : m_Window(nullptr), m_Width(Global::GetConfig().GetStartingWidth()), m_Height(Global::GetConfig().GetStartingHeight()), m_GUI(nullptr), m_CurrentScene(std::make_unique<Scene>())
 {
     if (!s_InitializedGL) {
         //////////////////////////////////////////////////////////////////////////////////////////////

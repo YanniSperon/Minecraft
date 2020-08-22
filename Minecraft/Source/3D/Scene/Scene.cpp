@@ -1,16 +1,21 @@
 #include "Scene.h"
+#include "Console.h"
 
 MC::Scene::Scene()
-	: m_CurrentCamera(0), m_ShouldRecalculateGeometryNumbers(false), m_NumberOfVertices(0), m_NumberOfIndices(0)
+	: m_Object3Ds(), m_Cameras(), m_CurrentCamera(0), m_ShouldRecalculateGeometryNumbers(false), m_NumberOfVertices(0), m_NumberOfIndices(0)
 {
-	m_Object3Ds = std::vector<std::unique_ptr<Object3D>>();
-	m_Cameras = std::vector<std::unique_ptr<Camera>>();
 	m_Cameras.push_back(std::make_unique<Camera>());
 }
 
 MC::Scene::~Scene()
 {
+	//for (int i = 0; i < m_Object3Ds.size(); i++) {
+	//	delete m_Object3Ds[i];
+	//}
 	m_Object3Ds.clear();
+	//for (int i = 0; i < m_Cameras.size(); i++) {
+	//	delete m_Cameras[i];
+	//}
 	m_Cameras.clear();
 }
 
@@ -27,13 +32,16 @@ void MC::Scene::Draw()
 
 void MC::Scene::AddObject3D(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath)
 {
-	m_Object3Ds.push_back(std::move(std::make_unique<Object3D>(meshPath, shaderPath, texturePath)));
+	//Object3D* tempObj = new Object3D(meshPath, shaderPath, texturePath);
+	//Console::Info("Pushing back %i", tempObj);
+	m_Object3Ds.push_back(std::make_unique<Object3D>(meshPath, shaderPath, texturePath));
+	//Console::Info("Pushed back %i", tempObj);
 	m_ShouldRecalculateGeometryNumbers = true;
 }
 
 void MC::Scene::AddCamera()
 {
-	m_Cameras.push_back(std::move(std::make_unique<Camera>()));
+	m_Cameras.push_back(std::make_unique<Camera>());
 }
 
 void MC::Scene::RemoveObject3D(int index)
