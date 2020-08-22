@@ -925,6 +925,7 @@
     <ClInclude Include="Source\3D\Texture\TextureManager.h" />
     <ClInclude Include="Source\3D\Object\Object3D.h" />
     <ClInclude Include="Source\3D\Scene\Camera.h" />
+    <ClInclude Include="Source\3D\Scene\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp">
@@ -968,5 +969,6 @@
     <ClCompile Include="Source\3D\Texture\TextureManager.cpp" />
     <ClCompile Include="Source\3D\Object\Object3D.cpp" />
     <ClCompile Include="Source\3D\Scene\Camera.cpp" />
+    <ClCompile Include="Source\3D\Scene\Scene.cpp" />
   </ItemGroup>
 </Project>

@@ -99,8 +99,7 @@ const glm::vec3& MC::Camera::GetRotation()
 
 glm::vec3 MC::Camera::GetUpDirection()
 {
-	//return glm::vec3(0.0f, 1.0f, 0.0f)*glm::radians(m_Rotation.z);
-	return glm::rotateZ(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(m_Rotation.z));
+	return glm::rotateZ(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(-m_Rotation.z));
 }
 
 const bool MC::Camera::GetWasUsedYet()
@@ -110,12 +109,7 @@ const bool MC::Camera::GetWasUsedYet()
 
 glm::vec3 MC::Camera::GetForwardDirection()
 {
-	//glm::rotate
-	//return glm::normalize(glm::vec3(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f) * glm::yawPitchRoll(glm::radians(m_Rotation.x), glm::radians(m_Rotation.y), glm::radians(m_Rotation.z))));
 	return glm::normalize(glm::vec3(glm::cos(glm::radians(m_Rotation.x)) * glm::cos(glm::radians(m_Rotation.y)), glm::sin(glm::radians(m_Rotation.y)), glm::sin(glm::radians(m_Rotation.x)) * glm::cos(glm::radians(m_Rotation.y))));
-	//return glm::rotateX(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(m_Rotation.x));
-	//return glm::rotateY(glm::vec3(0.0f, 0.0f, -1.0f), glm::radians(m_Rotation.y));
-	//return glm::rotateX(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(m_Rotation.y)) + glm::rotateY(glm::vec3(0.0f, 0.0f, -1.0f), glm::radians(m_Rotation.x));
 }
 
 glm::mat4 MC::Camera::GetProjectionMatrix()
@@ -128,22 +122,12 @@ glm::mat4 MC::Camera::GetViewMatrix()
 	return glm::lookAt(m_Translation, m_Translation + GetForwardDirection(), GetUpDirection());
 }
 
-//void MC::Camera::LookAt(glm::vec3 position)
-//{
-// Set the yaw and pitch based on the position of the object relative to the camera
-//	m_ForwardDirection = glm::normalize(position - m_Translation);
-//}
-
 void MC::Camera::LookAt(glm::vec3 position)
 {
-	auto difference = m_Translation - position;
-	auto direction = glm::normalize(difference);
-	m_Rotation.x = glm::degrees(glm::acos(glm::dot(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(direction.x, 0.0f, 0.0f))));
-	m_Rotation.y = glm::degrees(glm::acos(glm::dot(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, direction.y, 0.0f))));
-	Console::Warning("New X: %f", m_Rotation.x);
-	Console::Warning("New Y: %f", m_Rotation.y);
-	//m_Rotation.x = glm::degrees(glm::acos(glm::dot(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(forwardDirection.x, 0.0f, 0.0f))));
-	//m_Rotation.y = glm::degrees(glm::acos(glm::dot(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, forwardDirection.y, 0.0f))));
+	glm::vec3 newDirection = glm::normalize(m_Translation - position);
+
+	m_Rotation.x = glm::degrees(atan2(newDirection.z, newDirection.x)) + 180.0f;
+	m_Rotation.y = glm::degrees(-glm::asin(newDirection.y));
 }
 
 void MC::Camera::LookAtMouse(float sensitivity, float xPos, float yPos)

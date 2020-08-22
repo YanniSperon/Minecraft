@@ -33,19 +33,19 @@ const glm::vec3& MC::Object3D::GetScale()
 	return m_Scale;
 }
 
-const std::shared_ptr<MC::Mesh3D>& MC::Object3D::GetMesh()
+MC::Mesh3D& MC::Object3D::GetMesh()
 {
-	return m_Mesh;
+	return *m_Mesh;
 }
 
-const std::shared_ptr<MC::Shader>& MC::Object3D::GetShader()
+MC::Shader& MC::Object3D::GetShader()
 {
-	return m_Shader;
+	return *m_Shader;
 }
 
-const std::shared_ptr<MC::Texture>& MC::Object3D::GetTexture()
+MC::Texture& MC::Object3D::GetTexture()
 {
-	return m_Texture;
+	return *m_Texture;
 }
 
 void MC::Object3D::SetTranslation(const glm::vec3& translation)

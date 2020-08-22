@@ -26,9 +26,9 @@ namespace MC {
 		const glm::vec3& GetRotation();
 		const glm::vec3& GetScale();
 
-		const std::shared_ptr<Mesh3D>& GetMesh();
-		const std::shared_ptr<Shader>& GetShader();
-		const std::shared_ptr<Texture>& GetTexture();
+		Mesh3D& GetMesh();
+		Shader& GetShader();
+		Texture& GetTexture();
 
 		void SetTranslation(const glm::vec3& translation);
 		void SetRotation(const glm::vec3& rotation);

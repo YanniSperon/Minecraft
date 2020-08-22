@@ -19,27 +19,20 @@ using namespace MC;
 
 int main() {
     //////////////////////////////////////////////////////////////////////////////////////////////
-
     Global::Initialize();
-
     //////////////////////////////////////////////////////////////////////////////////////////////
-
     double timeConstant = 1.0;
     auto lastTime = std::chrono::high_resolution_clock::now();
     auto currentTime = lastTime;
-
     //////////////////////////////////////////////////////////////////////////////////////////////
-
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     bool shouldDisplayDebugInfo = true;
-
     //////////////////////////////////////////////////////////////////////////////////////////////
-    
-    std::unique_ptr<Object3D> cube = std::make_unique<Object3D>("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
-    std::unique_ptr<Camera> camera = std::make_unique<Camera>();
-    camera->SetRotation(glm::vec3(45.0f, 45.0f, 0.0f));
+    Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
+    Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(0.0f, 0.0f, -5.0f));
+    Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
+    Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(3.0f, 0.0f, -5.0f));
     glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     while (!Global::GetWindow().ShouldCloseWindow())
@@ -54,6 +47,11 @@ int main() {
         Global::GetWindow().PollEvents();
         Input::ProcessEvents(Global::GetKeyboardInput(), Global::GetMouseInput());
         //////////////////////////////////////////////////////////////////////////////////////////////
+        Global::GetWindow().ClearBuffer();
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        Scene& scene = Global::GetWindow().GetCurrentScene();
+        Camera& camera = scene.GetCurrentCamera();
+        //////////////////////////////////////////////////////////////////////////////////////////////
 
 
         // PROCESS INPUT
@@ -65,85 +63,52 @@ int main() {
         }
         if (Global::GetKeyboardInput().m_KeysPressed[MC_KEY_LEFT_CONTROL]) {
             glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            Global::GetMouseInput().m_ShouldReceiveInput = false;
         }
         if (Global::GetKeyboardInput().m_KeysReleased[MC_KEY_LEFT_CONTROL]) {
+            Global::GetMouseInput().m_ShouldReceiveInput = true;
+            camera.SetWasUsedYet(false);
             glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_W] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_W]) {
-            camera->MoveForward(deltaTime);
+            camera.MoveForward(deltaTime);
         }
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_A] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_A]) {
-            camera->StrafeLeft(deltaTime);
+            camera.StrafeLeft(deltaTime);
         }
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_S] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_S]) {
-            camera->MoveBackward(deltaTime);
+            camera.MoveBackward(deltaTime);
         }
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_D] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_D]) {
-            camera->StrafeRight(deltaTime);
+            camera.StrafeRight(deltaTime);
         }
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_LEFT_SHIFT] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_LEFT_SHIFT]) {
-            camera->MoveDown(deltaTime);
+            camera.MoveDown(deltaTime);
         }
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_SPACE] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_SPACE]) {
-            camera->MoveUp(deltaTime);
+            camera.MoveUp(deltaTime);
         }
-        //camera->SetUpDirection(glm::vec3(0.0f, -1.0f, 0.0f));
-        Console::Info("Player rotation (%f, %f, %f)", camera->GetRotation().x, camera->GetRotation().y, camera->GetRotation().z);
-        camera->LookAtMouse(Global::GetConfig().GetMouseSensitivity(), Global::GetMouseInput().m_MouseX, Global::GetMouseInput().m_MouseY);
-        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_E]) {
-            camera->LookAt(glm::vec3(0.0f, 0.0f, -5.0f));
+        if (Global::GetMouseInput().m_MouseMoved) {
+            camera.LookAtMouse(Global::GetConfig().GetMouseSensitivity(), Global::GetMouseInput().m_MouseX, Global::GetMouseInput().m_MouseY);
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        Global::GetWindow().ClearBuffer();
+
         //////////////////////////////////////////////////////////////////////////////////////////////
 
 
         // RENDER 3D
-        cube->SetTranslation(glm::vec3(0.0f, 0.0f, -5.0f));
-        cube->Draw(camera->GetProjectionMatrix(), camera->GetViewMatrix(), glm::mat4(1.0f));
+        Global::GetWindow().GetCurrentScene().Draw();
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////
 
 
         // RENDER GUI
-        ImGui_ImplGlfwGL3_NewFrame();
-        if (shouldDisplayDebugInfo) {
-            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+        Global::GetWindow().GetGUI().Begin();
 
-            ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
-            ImGui::SetNextWindowSize(ImVec2(Global::GetWindow().GetWidth(), Global::GetWindow().GetHeight()));
-            ImGui::Begin("Debug##F3Menu", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoInputs);
-            
-            GUI::PlaceTextLeft("%s", Devices::GetClientVersion().c_str());
-            GUI::SameLine();
-            GUI::PlaceTextRight("%s", Devices::GetCPPVersion().c_str());
+        Global::GetWindow().GetGUI().DisplayDebugInfo();
 
-            GUI::PlaceTextLeft("%.1f FPS", ImGui::GetIO().Framerate);
-            GUI::SameLine();
-            GUI::PlaceTextRight("Total Memory: %s", Devices::GetInstalledMemory().c_str());
-
-            GUI::PlaceTextLeft("%s", Devices::GetServerVersion().c_str());
-            GUI::SameLine();
-            GUI::PlaceTextRight("Used Memory: %s", Devices::GetUsedMemory().c_str());
-
-            GUI::PlaceTextRight("CPU: %s", Devices::GetCPUVersion().c_str());
-
-            GUI::PlaceTextLeft("XYZ: %.3f / %.3f / %.3f", 1.0f, 1.0f, 1.0f);
-
-            GUI::PlaceTextRight("Display: %ix%i", Global::GetWindow().GetWidth(), Global::GetWindow().GetHeight());
-
-            GUI::PlaceTextRight("%s", Devices::GetGPUVersion().c_str());
-
-            GUI::PlaceTextRight("%s", Devices::GetGLVersion().c_str());
-
-            ImGui::End();
-
-            ImGui::PopStyleColor();
-        }
-        ImGui::Render();
-        ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+        Global::GetWindow().GetGUI().End();
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////

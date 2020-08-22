@@ -11,9 +11,27 @@ namespace MC {
 		ImGuiStyle* m_Style;
 		ImGuiIO* m_IO;
 		ImFont* m_Font;
+
+		bool m_ShouldDisplayDebugInfo;
+		bool m_ShouldDisplayInventory;
+		bool m_ShouldDisplayMenu;
 	public:
 		GUI(GLFWwindow* window);
 		~GUI();
+
+		void Begin();
+		void DisplayDebugInfo();
+		void DisplayInventory();
+		void DisplayMenu();
+		void End();
+
+		bool GetShouldDisplayDebugInfo();
+		bool GetShouldDisplayInventory();
+		bool GetShouldDisplayMenu();
+
+		void SetShouldDisplayDebugInfo(bool shouldDisplayDebugInfo);
+		void SetShouldDisplayInventory(bool shouldDisplayInventory);
+		void SetShouldDisplayMenu(bool shouldDisplayMenu);
 
 		static void PlaceTextLeft(const char* fmt, ...);
 		static void PlaceTextCenter(const char* fmt, ...);

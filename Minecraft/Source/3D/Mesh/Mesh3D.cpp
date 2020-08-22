@@ -148,16 +148,14 @@ void MC::Mesh3D::LoadToVRAM()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 3));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 3));
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 5));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (char*)(sizeof(float) * 6));
 
 	glGenBuffers(1, &m_VRAMHandleIBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VRAMHandleIBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, IndexBufferSize(), m_Indices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glFinish();
 }
 
@@ -166,6 +164,7 @@ void MC::Mesh3D::UnloadFromVRAM()
 	if (m_VRAMHandleVBO != 0) {
 		glDeleteBuffers(1, &m_VRAMHandleVBO);
 		glDeleteBuffers(1, &m_VRAMHandleIBO);
+		glDeleteVertexArrays(1, &m_VRAMHandleVAO);
 
 		m_VRAMHandleVBO = 0;
 		m_VRAMHandleIBO = 0;
@@ -204,6 +203,7 @@ bool MC::Mesh3D::GetHasFakeUser()
 
 void MC::Mesh3D::Unbind()
 {
+	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

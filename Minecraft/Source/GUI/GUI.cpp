@@ -1,5 +1,6 @@
 #include "GUI.h"
 #include "Global.h"
+#include "Devices.h"
 
 #include "Vendor/ImGui/imgui_impl_glfw_gl3.h"
 
@@ -12,7 +13,7 @@ static bool s_InitializedIMGUI = false;
 #define GUI_FONT_SIZE 20.0f
 
 MC::GUI::GUI(GLFWwindow* window)
-    : m_Font(nullptr), m_IO(nullptr), m_Style(nullptr)
+    : m_Font(nullptr), m_IO(nullptr), m_Style(nullptr), m_ShouldDisplayDebugInfo(false), m_ShouldDisplayInventory(false), m_ShouldDisplayMenu(false)
 {
     if (!s_InitializedIMGUI) {
         //////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,6 +49,99 @@ MC::GUI::~GUI()
         ImGui::DestroyContext();
         s_InitializedIMGUI = false;
     }
+}
+
+void MC::GUI::Begin()
+{
+    ImGui_ImplGlfwGL3_NewFrame();
+}
+
+void MC::GUI::DisplayDebugInfo()
+{
+    if (m_ShouldDisplayDebugInfo) {
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
+        ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+        ImGui::SetNextWindowSize(ImVec2(Global::GetWindow().GetWidth(), Global::GetWindow().GetHeight()));
+        ImGui::Begin("Debug##F3Menu", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoInputs);
+
+        GUI::PlaceTextLeft("%s", Devices::GetClientVersion().c_str());
+        GUI::SameLine();
+        GUI::PlaceTextRight("%s", Devices::GetCPPVersion().c_str());
+
+        GUI::PlaceTextLeft("%.1f FPS", ImGui::GetIO().Framerate);
+        GUI::SameLine();
+        GUI::PlaceTextRight("Total Memory: %s", Devices::GetInstalledMemory().c_str());
+
+        GUI::PlaceTextLeft("%s", Devices::GetServerVersion().c_str());
+        GUI::SameLine();
+        GUI::PlaceTextRight("Used Memory: %s", Devices::GetUsedMemory().c_str());
+
+        GUI::PlaceTextRight("CPU: %s", Devices::GetCPUVersion().c_str());
+
+        glm::vec3 cameraTranslation = Global::GetWindow().GetCurrentScene().GetCurrentCamera().GetTranslation();
+        GUI::PlaceTextLeft("XYZ: %.3f / %.3f / %.3f", cameraTranslation.x, cameraTranslation.y, cameraTranslation.z);
+
+        GUI::PlaceTextRight("Display: %ix%i", Global::GetWindow().GetWidth(), Global::GetWindow().GetHeight());
+
+        GUI::PlaceTextRight("%s", Devices::GetGPUVersion().c_str());
+
+        GUI::PlaceTextRight("%s", Devices::GetGLVersion().c_str());
+
+        ImGui::End();
+
+        ImGui::PopStyleColor();
+    }
+}
+
+void MC::GUI::DisplayInventory()
+{
+    if (m_ShouldDisplayInventory) {
+
+    }
+}
+
+void MC::GUI::DisplayMenu()
+{
+    if (m_ShouldDisplayMenu) {
+
+    }
+}
+
+void MC::GUI::End()
+{
+    ImGui::Render();
+    ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+bool MC::GUI::GetShouldDisplayDebugInfo()
+{
+    return m_ShouldDisplayDebugInfo;
+}
+
+bool MC::GUI::GetShouldDisplayInventory()
+{
+    return m_ShouldDisplayInventory;
+}
+
+bool MC::GUI::GetShouldDisplayMenu()
+{
+    return m_ShouldDisplayMenu;
+}
+
+void MC::GUI::SetShouldDisplayDebugInfo(bool shouldDisplayDebugInfo)
+{
+    m_ShouldDisplayDebugInfo = shouldDisplayDebugInfo;
+}
+
+void MC::GUI::SetShouldDisplayInventory(bool shouldDisplayInventory)
+{
+    m_ShouldDisplayInventory = shouldDisplayInventory;
+}
+
+void MC::GUI::SetShouldDisplayMenu(bool shouldDisplayMenu)
+{
+    m_ShouldDisplayMenu = shouldDisplayMenu;
 }
 
 void MC::GUI::PlaceTextLeft(const char* fmt, ...)

@@ -29,6 +29,15 @@ MC::Window::Window()
         glEnable(GL_DEPTH_TEST);
         glDebugMessageCallback(Window::GLDebugMessageCallback, 0);
         //////////////////////////////////////////////////////////////////////////////////////////////
+        glfwSwapInterval(Global::GetConfig().GetHasVSync());
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        if (glfwRawMouseMotionSupported()) {
+            glfwSetInputMode(m_Window, GLFW_RAW_MOUSE_MOTION, Global::GetConfig().GetHasRawMouseInput());
+        }
+        else {
+            Global::GetConfig().SetHasRawMouseInput(false);
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////
         glfwSetCursorPosCallback(m_Window, Input::MousePositionCallback);
         glfwSetKeyCallback(m_Window, Input::KeyCallback);
         glfwSetWindowSizeCallback(m_Window, Window::WindowSizeCallback);
@@ -41,6 +50,7 @@ MC::Window::Window()
 MC::Window::~Window()
 {
     if (s_InitializedGL) {
+        glfwDestroyWindow(m_Window);
         glfwTerminate();
         s_InitializedGL = false;
     }
@@ -67,6 +77,11 @@ MC::GUI& MC::Window::GetGUI()
     return *m_GUI;
 }
 
+MC::Scene& MC::Window::GetCurrentScene()
+{
+    return *m_CurrentScene;
+}
+
 void MC::Window::SetWidth(int width)
 {
     m_Width = width;
@@ -87,10 +102,35 @@ void MC::Window::SetGUI(GUI* gui)
     m_GUI = gui;
 }
 
+void MC::Window::SetCurrentScene(std::unique_ptr<Scene> scene)
+{
+    m_CurrentScene = std::move(scene);
+}
+
 void MC::Window::ReplaceGUI(GUI* gui)
 {
     delete m_GUI;
     m_GUI = gui;
+}
+
+void MC::Window::PollEvents()
+{
+    glfwPollEvents();
+}
+
+void MC::Window::ClearBuffer()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void MC::Window::SwapBuffers()
+{
+    glfwSwapBuffers(m_Window);
+}
+
+bool MC::Window::ShouldCloseWindow()
+{
+    return glfwWindowShouldClose(m_Window);
 }
 
 void MC::Window::WindowSizeCallback(GLFWwindow* window, int width, int height)
@@ -116,24 +156,4 @@ void GLAPIENTRY MC::Window::GLDebugMessageCallback(GLenum source, GLenum type, G
         Console::Info("GL NOTIFICATION:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
         break;
     }
-}
-
-void MC::Window::PollEvents()
-{
-    glfwPollEvents();
-}
-
-void MC::Window::ClearBuffer()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void MC::Window::SwapBuffers()
-{
-    glfwSwapBuffers(m_Window);
-}
-
-bool MC::Window::ShouldCloseWindow()
-{
-    return glfwWindowShouldClose(m_Window);
 }

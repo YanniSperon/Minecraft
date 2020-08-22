@@ -23,9 +23,10 @@ namespace MC {
 		}
 	};
 
-	static std::vector<KeyEvent> keyEvents;
-	static std::vector<MouseEvent> mouseEvents;
-	static glm::vec3 mousePosition;
+	static std::vector<KeyEvent> keyEvents = std::vector<KeyEvent>();
+	static std::vector<MouseEvent> mouseEvents = std::vector<MouseEvent>();
+	static bool shouldSetMouseMoved = false;
+	static glm::vec2 mousePosition = glm::vec2(0.0f);
 
 	void Input::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
@@ -38,6 +39,7 @@ namespace MC {
 
 	void Input::MousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 	{
+		shouldSetMouseMoved = true;
 		mousePosition.x = (float) xpos;
 		mousePosition.y = (float) ypos;
 	}
@@ -74,9 +76,11 @@ namespace MC {
 			}
 		}
 		if (mouseIn.m_ShouldReceiveInput) {
+			mouseIn.m_MouseMoved = shouldSetMouseMoved;
 			mouseIn.m_MouseX = mousePosition.x;
 			mouseIn.m_MouseY = mousePosition.y;
 		}
+		shouldSetMouseMoved = false;
 		mouseEvents.clear();
 	}
 

@@ -178,6 +178,7 @@ namespace MC {
 		std::vector<bool> m_ButtonClicked;
 		std::vector<bool> m_ButtonHeld;
 		std::vector<bool> m_ButtonReleased;
+		bool m_MouseMoved;
 		float m_MouseX;
 		float m_MouseY;
 		bool m_ShouldReceiveInput;
@@ -186,6 +187,7 @@ namespace MC {
 			m_ButtonClicked = std::vector<bool>(MOUSE_BUTTONS_SIZE, false);
 			m_ButtonHeld = std::vector<bool>(MOUSE_BUTTONS_SIZE, false);
 			m_ButtonReleased = std::vector<bool>(MOUSE_BUTTONS_SIZE, false);
+			m_MouseMoved = false;
 			m_MouseX = 0.0f;
 			m_MouseY = 0.0f;
 			m_ShouldReceiveInput = true;
