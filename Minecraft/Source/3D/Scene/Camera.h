@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Vendor/glm/glm.hpp"
+#include "3D/Object/Object3D.h"
+
+#include <memory>
 
 namespace MC {
 	class Camera {
@@ -18,6 +21,8 @@ namespace MC {
 		glm::vec3 m_Rotation;
 
 		bool m_WasUsedYet;
+
+		std::unique_ptr<Object3D> m_Skybox;
 	public:
 		Camera();
 
@@ -30,6 +35,7 @@ namespace MC {
 		void SetTranslation(const glm::vec3& translation);
 		void SetUpDirection(const glm::vec3& upDirection);
 		void SetWasUsedYet(bool wasUsedYet);
+		void SetSkybox(std::unique_ptr<Object3D> skybox);
 
 		const float GetFOV();
 		const float GetNearPlane();
@@ -40,6 +46,7 @@ namespace MC {
 		const glm::vec3& GetTranslation();
 		const glm::vec3& GetRotation();
 		const bool GetWasUsedYet();
+		Object3D& GetSkybox();
 		glm::vec3 GetUpDirection();
 		glm::vec3 GetForwardDirection();
 		glm::mat4 GetProjectionMatrix();
@@ -58,5 +65,7 @@ namespace MC {
 		void SetRotation(const glm::vec3& rotation);
 
 		void AddRotation(const glm::vec3& rotation);
+
+		void DrawSkybox(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& modelOffset);
 	};
 }

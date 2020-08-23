@@ -30,6 +30,7 @@ std::unordered_map<std::string, std::shared_ptr<MC::Texture>>& MC::TextureManage
 void MC::TextureManager::Cleanup()
 {
 	if (m_ShouldCleanup) {
+		Texture::Unbind();
 		auto it = m_Textures.begin();
 		while (it != m_Textures.end()) {
 			if (it->second.unique() && !it->second->GetHasFakeUser()) {

@@ -26,19 +26,12 @@ int main() {
     auto currentTime = lastTime;
     //////////////////////////////////////////////////////////////////////////////////////////////
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    bool shouldDisplayDebugInfo = true;
     //////////////////////////////////////////////////////////////////////////////////////////////
-    //Console::Info("Attempting to create 0 block");
-    //Object3D* bl = new Object3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
-    //Global::GetWindow().GetCurrentScene().GetObject3Ds().push_back(bl);
-    //Console::Info("Created 0 block");
-    //Console::Info("Attempting to create first block");
+    Global::GetWindow().GetCurrentScene().GetCurrentCamera().SetSkybox(std::make_unique<Object3D>("Resources/Skybox.obj", "Resources/Basic", "Resources/Skybox.png"));
     Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
-    //Console::Info("Created first block");
     Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(0.0f, 0.0f, -5.0f));
-    //Console::Info("Moving first block");
-    Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
-    Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(3.0f, 0.0f, -5.0f));
+    Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Sphere.obj", "Resources/Basic", "Resources/Basic.png");
+    Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(0.0f, 0.0f, 5.0f));
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -66,7 +59,7 @@ int main() {
 
         // PROCESS INPUT
         if (Global::GetKeyboardInput().m_KeysPressed[MC_KEY_F3]) {
-            shouldDisplayDebugInfo = !shouldDisplayDebugInfo;
+            Global::GetWindow().GetGUI().ToggleShouldDisplayDebugInfo();
         }
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_RIGHT_CONTROL] && Global::GetKeyboardInput().m_KeysHeld[MC_KEY_0]) {
             Global::GetConfig().Save();
@@ -117,6 +110,8 @@ int main() {
         Global::GetWindow().GetGUI().Begin();
 
         Global::GetWindow().GetGUI().DisplayDebugInfo();
+        Global::GetWindow().GetGUI().DisplayInventory();
+        Global::GetWindow().GetGUI().DisplayMenu();
 
         Global::GetWindow().GetGUI().End();
 

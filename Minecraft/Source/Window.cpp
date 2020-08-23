@@ -9,7 +9,7 @@
 static bool s_InitializedGL = false;
 
 MC::Window::Window()
-    : m_Window(nullptr), m_Width(Global::GetConfig().GetStartingWidth()), m_Height(Global::GetConfig().GetStartingHeight()), m_GUI(nullptr), m_CurrentScene(std::make_unique<Scene>())
+    : m_Window(nullptr), m_Width(Global::GetConfig().GetStartingWidth()), m_Height(Global::GetConfig().GetStartingHeight()), m_GUI(nullptr), m_CurrentScene(std::make_unique<Scene>()), m_CurrentShaderID(0)
 {
     if (!s_InitializedGL) {
         //////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,8 +25,12 @@ MC::Window::Window()
         //////////////////////////////////////////////////////////////////////////////////////////////
         GLenum err = glewInit();
         Console::Assert(err == GLEW_OK, "Failed GLEW Initialization - %s", reinterpret_cast<char const*>(glewGetErrorString(err)));
+        //////////////////////////////////////////////////////////////////////////////////////////////
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_CCW);
+        //////////////////////////////////////////////////////////////////////////////////////////////
         glDebugMessageCallback(Window::GLDebugMessageCallback, 0);
         //////////////////////////////////////////////////////////////////////////////////////////////
         glfwSwapInterval(Global::GetConfig().GetHasVSync());
@@ -82,6 +86,11 @@ MC::Scene& MC::Window::GetCurrentScene()
     return *m_CurrentScene;
 }
 
+GLuint MC::Window::GetCurrentShaderID()
+{
+    return m_CurrentShaderID;
+}
+
 void MC::Window::SetWidth(int width)
 {
     m_Width = width;
@@ -105,6 +114,11 @@ void MC::Window::SetGUI(GUI* gui)
 void MC::Window::SetCurrentScene(std::unique_ptr<Scene> scene)
 {
     m_CurrentScene = std::move(scene);
+}
+
+void MC::Window::SetCurrentShaderID(GLuint shaderID)
+{
+    m_CurrentShaderID = shaderID;
 }
 
 void MC::Window::ReplaceGUI(GUI* gui)

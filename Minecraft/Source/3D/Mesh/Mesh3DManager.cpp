@@ -30,6 +30,7 @@ std::unordered_map<std::string, std::shared_ptr<MC::Mesh3D>>& MC::Mesh3DManager:
 void MC::Mesh3DManager::Cleanup()
 {
 	if (m_ShouldCleanup) {
+		Mesh3D::Unbind();
 		auto it = m_Meshes.begin();
 		while (it != m_Meshes.end()) {
 			if (it->second.unique() && !it->second->GetHasFakeUser()) {

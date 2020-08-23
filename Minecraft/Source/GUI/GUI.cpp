@@ -144,6 +144,21 @@ void MC::GUI::SetShouldDisplayMenu(bool shouldDisplayMenu)
     m_ShouldDisplayMenu = shouldDisplayMenu;
 }
 
+void MC::GUI::ToggleShouldDisplayDebugInfo()
+{
+    m_ShouldDisplayDebugInfo = !m_ShouldDisplayDebugInfo;
+}
+
+void MC::GUI::ToggleShouldDisplayInventory()
+{
+    m_ShouldDisplayInventory = !m_ShouldDisplayInventory;
+}
+
+void MC::GUI::ToggleShouldDisplayMenu()
+{
+    m_ShouldDisplayMenu = !m_ShouldDisplayMenu;
+}
+
 void MC::GUI::PlaceTextLeft(const char* fmt, ...)
 {
     va_list args;

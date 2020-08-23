@@ -33,6 +33,10 @@ namespace MC {
 		void SetShouldDisplayInventory(bool shouldDisplayInventory);
 		void SetShouldDisplayMenu(bool shouldDisplayMenu);
 
+		void ToggleShouldDisplayDebugInfo();
+		void ToggleShouldDisplayInventory();
+		void ToggleShouldDisplayMenu();
+
 		static void PlaceTextLeft(const char* fmt, ...);
 		static void PlaceTextCenter(const char* fmt, ...);
 		static void PlaceTextRight(const char* fmt, ...);

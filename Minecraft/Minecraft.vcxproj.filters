@@ -926,6 +926,8 @@
     <ClInclude Include="Source\3D\Object\Object3D.h" />
     <ClInclude Include="Source\3D\Scene\Camera.h" />
     <ClInclude Include="Source\3D\Scene\Scene.h" />
+    <ClInclude Include="Source\3D\Chunk\Chunk.h" />
+    <ClInclude Include="Source\3D\Chunk\ChunkManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp">
@@ -970,5 +972,9 @@
     <ClCompile Include="Source\3D\Object\Object3D.cpp" />
     <ClCompile Include="Source\3D\Scene\Camera.cpp" />
     <ClCompile Include="Source\3D\Scene\Scene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Instanced.frag" />
+    <None Include="Resources\Instanced.geom" />
   </ItemGroup>
 </Project>

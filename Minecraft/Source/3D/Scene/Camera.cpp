@@ -7,7 +7,7 @@
 #include "Vendor/glm/gtx/rotate_vector.hpp"
 
 MC::Camera::Camera()
-	: m_FOV(Global::GetConfig().GetFOV()), m_NearPlane(0.1f), m_FarPlane(100.0f), m_MovementSpeed(5.0f), m_OldMouseX(0.0f), m_OldMouseY(0.0f), m_Translation(0.0f), m_Rotation(-90.0f, 0.0f, 0.0f), m_WasUsedYet(false)
+	: m_FOV(Global::GetConfig().GetFOV()), m_NearPlane(0.1f), m_FarPlane(250.0f), m_MovementSpeed(5.0f), m_OldMouseX(0.0f), m_OldMouseY(0.0f), m_Translation(0.0f), m_Rotation(-90.0f, 0.0f, 0.0f), m_WasUsedYet(false), m_Skybox(nullptr)
 {
 
 }
@@ -45,6 +45,7 @@ void MC::Camera::SetOldMouseY(float y)
 void MC::Camera::SetTranslation(const glm::vec3& translation)
 {
 	m_Translation = translation;
+	m_Skybox->SetTranslation(m_Translation);
 }
 
 void MC::Camera::SetUpDirection(const glm::vec3& upDirection)
@@ -55,6 +56,12 @@ void MC::Camera::SetUpDirection(const glm::vec3& upDirection)
 void MC::Camera::SetWasUsedYet(bool wasUsedYet)
 {
 	m_WasUsedYet = wasUsedYet;
+}
+
+void MC::Camera::SetSkybox(std::unique_ptr<Object3D> skybox)
+{
+	m_Skybox = std::move(skybox);
+	m_Skybox->SetScale(glm::vec3(250.0f, 250.0f, 250.0f));
 }
 
 const float MC::Camera::GetFOV()
@@ -105,6 +112,11 @@ glm::vec3 MC::Camera::GetUpDirection()
 const bool MC::Camera::GetWasUsedYet()
 {
 	return m_WasUsedYet;
+}
+
+MC::Object3D& MC::Camera::GetSkybox()
+{
+	return *m_Skybox;
 }
 
 glm::vec3 MC::Camera::GetForwardDirection()
@@ -158,6 +170,7 @@ void MC::Camera::MoveForward(float deltaTime)
 	glm::vec2 normalizedViewDirection = glm::normalize(glm::vec2(forwardDirection.x, forwardDirection.z));
 	m_Translation.x += m_MovementSpeed * normalizedViewDirection.x * deltaTime;
 	m_Translation.z += m_MovementSpeed * normalizedViewDirection.y * deltaTime;
+	m_Skybox->SetTranslation(m_Translation);
 }
 
 void MC::Camera::MoveBackward(float deltaTime)
@@ -166,6 +179,7 @@ void MC::Camera::MoveBackward(float deltaTime)
 	glm::vec2 normalizedViewDirection = glm::normalize(glm::vec2(forwardDirection.x, forwardDirection.z));
 	m_Translation.x += -m_MovementSpeed * normalizedViewDirection.x * deltaTime;
 	m_Translation.z += -m_MovementSpeed * normalizedViewDirection.y * deltaTime;
+	m_Skybox->SetTranslation(m_Translation);
 }
 
 void MC::Camera::StrafeLeft(float deltaTime)
@@ -175,6 +189,7 @@ void MC::Camera::StrafeLeft(float deltaTime)
 	glm::vec2 normalizedStrafeDirection = glm::normalize(glm::vec2(strafeDirection.x, strafeDirection.z));
 	m_Translation.x += -m_MovementSpeed * normalizedStrafeDirection.x * deltaTime;
 	m_Translation.z += -m_MovementSpeed * normalizedStrafeDirection.y * deltaTime;
+	m_Skybox->SetTranslation(m_Translation);
 }
 
 void MC::Camera::StrafeRight(float deltaTime)
@@ -184,24 +199,36 @@ void MC::Camera::StrafeRight(float deltaTime)
 	glm::vec2 normalizedStrafeDirection = glm::normalize(glm::vec2(strafeDirection.x, strafeDirection.z));
 	m_Translation.x += m_MovementSpeed * normalizedStrafeDirection.x * deltaTime;
 	m_Translation.z += m_MovementSpeed * normalizedStrafeDirection.y * deltaTime;
+	m_Skybox->SetTranslation(m_Translation);
 }
 
 void MC::Camera::MoveUp(float deltaTime)
 {
 	m_Translation += m_MovementSpeed * glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime;
+	m_Skybox->SetTranslation(m_Translation);
 }
 
 void MC::Camera::MoveDown(float deltaTime)
 {
 	m_Translation += -m_MovementSpeed * glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime;
+	m_Skybox->SetTranslation(m_Translation);
 }
 
 void MC::Camera::SetRotation(const glm::vec3& rotation)
 {
 	m_Rotation = rotation;
+	m_Skybox->SetTranslation(m_Translation);
 }
 
 void MC::Camera::AddRotation(const glm::vec3& rotation)
 {
 	m_Rotation += rotation;
+	m_Skybox->SetTranslation(m_Translation);
+}
+
+void MC::Camera::DrawSkybox(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& modelOffset)
+{
+	if (m_Skybox != nullptr) {
+		m_Skybox->Draw(projection, view, modelOffset);
+	}
 }

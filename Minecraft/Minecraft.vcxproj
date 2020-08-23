@@ -95,6 +95,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\3D\Chunk\Chunk.h" />
+    <ClInclude Include="Source\3D\Chunk\ChunkManager.h" />
     <ClInclude Include="Source\3D\Scene\Camera.h" />
     <ClInclude Include="Source\3D\Mesh\Mesh3D.h" />
     <ClInclude Include="Source\3D\Mesh\Mesh3DManager.h" />
@@ -427,6 +429,10 @@
     <ClCompile Include="Source\Vendor\glm\detail\glm.cpp" />
     <ClCompile Include="Source\Vendor\stb\stb_image.cpp" />
     <ClCompile Include="Source\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Instanced.frag" />
+    <None Include="Resources\Instanced.geom" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

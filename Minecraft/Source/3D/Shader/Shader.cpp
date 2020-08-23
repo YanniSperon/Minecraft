@@ -1,21 +1,26 @@
 #include "Shader.h"
 #include "Console.h"
+#include "Global.h"
 
 #include <string>
 #include <fstream>
 #include <sstream>
 
 MC::Shader::Shader(const std::string& name)
-    : m_ID(0), m_FakeUser(false)
+    : m_ID(0), m_UBO(0), m_FakeUser(false)
 {
     std::string geometryPath = name + std::string(".geom");
     std::string fragmentPath = name + std::string(".frag");
     LoadShader(geometryPath.c_str(), fragmentPath.c_str());
+    glGenBuffers(1, &m_UBO);
+    glBindBuffer(GL_UNIFORM_BUFFER, m_UBO);
+    glBufferData(GL_UNIFORM_BUFFER, 128, nullptr, GL_DYNAMIC_DRAW);
 }
 
 MC::Shader::~Shader()
 {
     glDeleteProgram(m_ID);
+    glDeleteBuffers(1, &m_UBO);
     Console::Warning("Deleted shader");
 }
 
@@ -87,7 +92,11 @@ void MC::Shader::LoadShader(const char* geometryShaderPath, const char* fragment
 
 void MC::Shader::Bind()
 {
-    glUseProgram(m_ID);
+    if (Global::GetWindow().GetCurrentShaderID() != m_ID) {
+        glUseProgram(m_ID);
+        glBindBuffer(GL_UNIFORM_BUFFER, m_UBO);
+        Global::GetWindow().SetCurrentShaderID(m_ID);
+    }
 }
 
 void MC::Shader::SetBool(const std::string& name, bool value)

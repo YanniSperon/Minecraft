@@ -25,6 +25,7 @@ void MC::Scene::Draw()
 	glm::mat4 projection = currentCamera.GetProjectionMatrix();
 	glm::mat4 view = currentCamera.GetViewMatrix();
 	glm::mat4 offset = glm::mat4(1.0f);
+	currentCamera.DrawSkybox(projection, view, offset);
 	for (int i = 0; i < m_Object3Ds.size(); i++) {
 		m_Object3Ds[i]->Draw(projection, view, offset);
 	}

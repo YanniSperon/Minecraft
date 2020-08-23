@@ -30,6 +30,7 @@ std::unordered_map<std::string, std::shared_ptr<MC::Shader>>& MC::ShaderManager:
 void MC::ShaderManager::Cleanup()
 {
 	if (m_ShouldCleanup) {
+		Shader::Unbind();
 		auto it = m_Shaders.begin();
 		while (it != m_Shaders.end()) {
 			if (it->second.unique() && !it->second->GetHasFakeUser()) {

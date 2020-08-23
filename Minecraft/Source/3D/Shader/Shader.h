@@ -10,6 +10,8 @@ namespace MC {
 	private:
 		GLuint m_ID;
 
+		GLuint m_UBO;
+
 		bool m_FakeUser;
 	public:
 		Shader(const std::string& name);
