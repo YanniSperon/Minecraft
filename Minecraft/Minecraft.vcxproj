@@ -95,15 +95,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\3D\Chunk\Block.h" />
     <ClInclude Include="Source\3D\Chunk\Chunk.h" />
     <ClInclude Include="Source\3D\Chunk\ChunkManager.h" />
-    <ClInclude Include="Source\3D\Scene\Camera.h" />
     <ClInclude Include="Source\3D\Mesh\Mesh3D.h" />
     <ClInclude Include="Source\3D\Mesh\Mesh3DManager.h" />
     <ClInclude Include="Source\3D\Object\Object3D.h" />
+    <ClInclude Include="Source\3D\Scene\Camera.h" />
     <ClInclude Include="Source\3D\Scene\Scene.h" />
-    <ClInclude Include="Source\3D\Shader\ShaderManager.h" />
     <ClInclude Include="Source\3D\Shader\Shader.h" />
+    <ClInclude Include="Source\3D\Shader\ShaderManager.h" />
     <ClInclude Include="Source\3D\Texture\Texture.h" />
     <ClInclude Include="Source\3D\Texture\TextureManager.h" />
     <ClInclude Include="Source\Config.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Source\GUI\GUI.h" />
     <ClInclude Include="Source\Global.h" />
     <ClInclude Include="Source\Input.h" />
+    <ClInclude Include="Source\Random.h" />
     <ClInclude Include="Source\Vendor\ImGui\imconfig.h" />
     <ClInclude Include="Source\Vendor\ImGui\imgui.h" />
     <ClInclude Include="Source\Vendor\ImGui\imgui_impl_glfw_gl3.h" />
@@ -119,6 +121,7 @@
     <ClInclude Include="Source\Vendor\ImGui\imstb_rectpack.h" />
     <ClInclude Include="Source\Vendor\ImGui\imstb_textedit.h" />
     <ClInclude Include="Source\Vendor\ImGui\imstb_truetype.h" />
+    <ClInclude Include="Source\Vendor\SimplexNoise\SimplexNoise.h" />
     <ClInclude Include="Source\Vendor\glm\common.hpp" />
     <ClInclude Include="Source\Vendor\glm\detail\_features.hpp" />
     <ClInclude Include="Source\Vendor\glm\detail\_fixes.hpp" />
@@ -405,13 +408,15 @@
     <ClInclude Include="Source\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\3D\Scene\Camera.cpp" />
+    <ClCompile Include="Source\3D\Chunk\Block.cpp" />
+    <ClCompile Include="Source\3D\Chunk\Chunk.cpp" />
     <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp" />
     <ClCompile Include="Source\3D\Mesh\Mesh3DManager.cpp" />
     <ClCompile Include="Source\3D\Object\Object3D.cpp" />
+    <ClCompile Include="Source\3D\Scene\Camera.cpp" />
     <ClCompile Include="Source\3D\Scene\Scene.cpp" />
-    <ClCompile Include="Source\3D\Shader\ShaderManager.cpp" />
     <ClCompile Include="Source\3D\Shader\Shader.cpp" />
+    <ClCompile Include="Source\3D\Shader\ShaderManager.cpp" />
     <ClCompile Include="Source\3D\Texture\Texture.cpp" />
     <ClCompile Include="Source\3D\Texture\TextureManager.cpp" />
     <ClCompile Include="Source\Application.cpp" />
@@ -421,18 +426,16 @@
     <ClCompile Include="Source\GUI\GUI.cpp" />
     <ClCompile Include="Source\Global.cpp" />
     <ClCompile Include="Source\Input.cpp" />
+    <ClCompile Include="Source\Random.cpp" />
     <ClCompile Include="Source\Vendor\ImGui\imgui.cpp" />
     <ClCompile Include="Source\Vendor\ImGui\imgui_demo.cpp" />
     <ClCompile Include="Source\Vendor\ImGui\imgui_draw.cpp" />
     <ClCompile Include="Source\Vendor\ImGui\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="Source\Vendor\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Vendor\SimplexNoise\SimplexNoise.cpp" />
     <ClCompile Include="Source\Vendor\glm\detail\glm.cpp" />
     <ClCompile Include="Source\Vendor\stb\stb_image.cpp" />
     <ClCompile Include="Source\Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Instanced.frag" />
-    <None Include="Resources\Instanced.geom" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

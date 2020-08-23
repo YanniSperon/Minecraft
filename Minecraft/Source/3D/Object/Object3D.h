@@ -40,8 +40,6 @@ namespace MC {
 
 		glm::mat4 GetTransformationMatrix();
 
-		void Bind();
-
 		void Draw(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& modelOffset);
 	};
 }

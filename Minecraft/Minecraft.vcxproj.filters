@@ -4,8 +4,23 @@
     <Filter Include="3D">
       <UniqueIdentifier>{1C715900-08FD-870B-71AB-880B5D56880B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3D\Chunk">
+      <UniqueIdentifier>{24BDE271-108A-3D7D-39A3-2B2525CF720B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="3D\Mesh">
       <UniqueIdentifier>{58F8B6FB-C4D7-3597-CDEF-C06D394E9CF8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D\Object">
+      <UniqueIdentifier>{2287C5C9-8EF1-7940-D72F-2BE643D95795}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D\Scene">
+      <UniqueIdentifier>{39430173-2510-5C7E-4E29-4A263A55910C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D\Shader">
+      <UniqueIdentifier>{42C981D3-AE33-364A-F771-E7EF631B149F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D\Texture">
+      <UniqueIdentifier>{7CF25E8B-68AA-A0D8-D1B1-7934BD883BC9}</UniqueIdentifier>
     </Filter>
     <Filter Include="GUI">
       <UniqueIdentifier>{2AEC870B-96F5-877C-1F71-9E7C8B79937C}</UniqueIdentifier>
@@ -15,6 +30,9 @@
     </Filter>
     <Filter Include="Vendor\ImGui">
       <UniqueIdentifier>{FDF620D0-E959-B074-92DF-E82A7E217CF7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\SimplexNoise">
+      <UniqueIdentifier>{82641E94-EEC5-FBA1-7733-4254E3933261}</UniqueIdentifier>
     </Filter>
     <Filter Include="Vendor\glm">
       <UniqueIdentifier>{627B7327-4E33-B574-B73A-8ED0A3115065}</UniqueIdentifier>
@@ -34,10 +52,43 @@
     <Filter Include="Vendor\glm\simd">
       <UniqueIdentifier>{FE44059A-6AD0-725E-73E1-F552DFEBCE5E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vendor\stb">
+      <UniqueIdentifier>{6BAF7327-5767-B574-C06E-8ED0AC455065}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\3D\Chunk\Chunk.h">
+      <Filter>3D\Chunk</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Chunk\ChunkManager.h">
+      <Filter>3D\Chunk</Filter>
+    </ClInclude>
     <ClInclude Include="Source\3D\Mesh\Mesh3D.h">
       <Filter>3D\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Mesh\Mesh3DManager.h">
+      <Filter>3D\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Object\Object3D.h">
+      <Filter>3D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Scene\Camera.h">
+      <Filter>3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Scene\Scene.h">
+      <Filter>3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Shader\Shader.h">
+      <Filter>3D\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Shader\ShaderManager.h">
+      <Filter>3D\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Texture\Texture.h">
+      <Filter>3D\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3D\Texture\TextureManager.h">
+      <Filter>3D\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Source\Config.h" />
     <ClInclude Include="Source\Console.h" />
@@ -47,6 +98,7 @@
     </ClInclude>
     <ClInclude Include="Source\Global.h" />
     <ClInclude Include="Source\Input.h" />
+    <ClInclude Include="Source\Random.h" />
     <ClInclude Include="Source\Vendor\ImGui\imconfig.h">
       <Filter>Vendor\ImGui</Filter>
     </ClInclude>
@@ -67,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="Source\Vendor\ImGui\imstb_truetype.h">
       <Filter>Vendor\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vendor\SimplexNoise\SimplexNoise.h">
+      <Filter>Vendor\SimplexNoise</Filter>
     </ClInclude>
     <ClInclude Include="Source\Vendor\glm\common.hpp">
       <Filter>Vendor\glm</Filter>
@@ -914,24 +969,39 @@
     <ClInclude Include="Source\Vendor\glm\vector_relational.hpp">
       <Filter>Vendor\glm</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Window.h" />
-    <ClInclude Include="Source\3D\Mesh\Mesh3DManager.h">
-      <Filter>3D\Mesh</Filter>
+    <ClInclude Include="Source\Vendor\stb\stb_image.h">
+      <Filter>Vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="Source\3D\Shader\Shader.h" />
-    <ClInclude Include="Source\3D\Shader\ShaderManager.h" />
-    <ClInclude Include="Source\3D\Texture\Texture.h" />
-    <ClInclude Include="Source\Vendor\stb\stb_image.h" />
-    <ClInclude Include="Source\3D\Texture\TextureManager.h" />
-    <ClInclude Include="Source\3D\Object\Object3D.h" />
-    <ClInclude Include="Source\3D\Scene\Camera.h" />
-    <ClInclude Include="Source\3D\Scene\Scene.h" />
-    <ClInclude Include="Source\3D\Chunk\Chunk.h" />
-    <ClInclude Include="Source\3D\Chunk\ChunkManager.h" />
+    <ClInclude Include="Source\Window.h" />
+    <ClInclude Include="Source\3D\Chunk\Block.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp">
       <Filter>3D\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Mesh\Mesh3DManager.cpp">
+      <Filter>3D\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Object\Object3D.cpp">
+      <Filter>3D\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Scene\Camera.cpp">
+      <Filter>3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Scene\Scene.cpp">
+      <Filter>3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Shader\Shader.cpp">
+      <Filter>3D\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Shader\ShaderManager.cpp">
+      <Filter>3D\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Texture\Texture.cpp">
+      <Filter>3D\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3D\Texture\TextureManager.cpp">
+      <Filter>3D\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Config.cpp" />
@@ -942,6 +1012,7 @@
     </ClCompile>
     <ClCompile Include="Source\Global.cpp" />
     <ClCompile Include="Source\Input.cpp" />
+    <ClCompile Include="Source\Random.cpp" />
     <ClCompile Include="Source\Vendor\ImGui\imgui.cpp">
       <Filter>Vendor\ImGui</Filter>
     </ClCompile>
@@ -957,24 +1028,17 @@
     <ClCompile Include="Source\Vendor\ImGui\imgui_widgets.cpp">
       <Filter>Vendor\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Vendor\SimplexNoise\SimplexNoise.cpp">
+      <Filter>Vendor\SimplexNoise</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Vendor\glm\detail\glm.cpp">
       <Filter>Vendor\glm\detail</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Window.cpp" />
-    <ClCompile Include="Source\3D\Mesh\Mesh3DManager.cpp">
-      <Filter>3D\Mesh</Filter>
+    <ClCompile Include="Source\Vendor\stb\stb_image.cpp">
+      <Filter>Vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="Source\3D\Shader\Shader.cpp" />
-    <ClCompile Include="Source\3D\Shader\ShaderManager.cpp" />
-    <ClCompile Include="Source\Vendor\stb\stb_image.cpp" />
-    <ClCompile Include="Source\3D\Texture\Texture.cpp" />
-    <ClCompile Include="Source\3D\Texture\TextureManager.cpp" />
-    <ClCompile Include="Source\3D\Object\Object3D.cpp" />
-    <ClCompile Include="Source\3D\Scene\Camera.cpp" />
-    <ClCompile Include="Source\3D\Scene\Scene.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Instanced.frag" />
-    <None Include="Resources\Instanced.geom" />
+    <ClCompile Include="Source\Window.cpp" />
+    <ClCompile Include="Source\3D\Chunk\Block.cpp" />
+    <ClCompile Include="Source\3D\Chunk\Chunk.cpp" />
   </ItemGroup>
 </Project>

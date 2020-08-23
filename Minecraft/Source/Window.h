@@ -15,7 +15,7 @@ namespace MC {
 		GUI* m_GUI;
 		std::unique_ptr<Scene> m_CurrentScene;
 
-		GLuint m_CurrentShaderID;
+		GLuint m_CurrentlyBoundShaderID;
 	public:
 		Window();
 		~Window();
@@ -25,14 +25,14 @@ namespace MC {
 		GLFWwindow* GetGLFWwindow();
 		GUI& GetGUI();
 		Scene& GetCurrentScene();
-		GLuint GetCurrentShaderID();
+		GLuint GetCurrentlyBoundShaderID();
 
 		void SetWidth(int width);
 		void SetHeight(int height);
 		void SetGLFWwindow(GLFWwindow* window);
 		void SetGUI(GUI* gui);
 		void SetCurrentScene(std::unique_ptr<Scene> scene);
-		void SetCurrentShaderID(GLuint shaderID);
+		void SetCurrentlyBoundShaderID(GLuint shaderID);
 
 		void ReplaceGUI(GUI* gui);
 

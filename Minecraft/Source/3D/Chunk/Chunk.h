@@ -1,45 +1,28 @@
 #pragma once
 
+#include "3D/Chunk/Block.h"
+
 #include <glew.h>
+
 #include <string>
+#include <vector>
+#include <memory>
 
 #include "Vendor/glm/glm.hpp"
+
 
 namespace MC {
 	class Chunk {
 	private:
-		Vertex3D* m_Vertices;
-		GLuint m_NumVertices;
-		GLuint* m_Indices;
-		GLuint m_NumIndices;
-		GLuint m_VRAMHandleVAO;
-		GLuint m_VRAMHandleVBO;
-		GLuint m_VRAMHandleIBO;
+		std::vector<std::vector<std::vector<std::unique_ptr<Block>>>> m_Blocks;
 
-		bool m_FakeUser;
+		glm::ivec3 m_ChunkPosition;
 	public:
-		Mesh3D(const std::string& pathToModel, bool shouldLoadToVRAM = true);
-		~Mesh3D();
+		Chunk(const glm::ivec3& chunkPosition);
+		~Chunk();
 
-		void Bind();
-		void Draw();
+		void Draw(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& offset);
 
-		GLsizeiptr VertexBufferSize();
-		GLsizeiptr IndexBufferSize();
-
-		void LoadToRAM(const std::string& path);
-		void UnloadFromRAM();
-		void LoadToVRAM();
-		void UnloadFromVRAM();
-
-		Vertex3D* GetVertices();
-		GLuint GetNumVertices();
-		GLuint* GetIndices();
-		GLuint GetNumIndices();
-
-		void SetHasFakeUser(bool fakeUser);
-		bool GetHasFakeUser();
-
-		static void Unbind();
+		Block& GetBlock(int x, int y, int z);
 	};
 }

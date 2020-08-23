@@ -9,7 +9,6 @@ namespace MC {
 	class Shader {
 	private:
 		GLuint m_ID;
-
 		GLuint m_UBO;
 
 		bool m_FakeUser;
@@ -19,7 +18,7 @@ namespace MC {
 
 		void LoadShader(const char* geometryShaderPath, const char* fragmentShaderPath);
 
-		void Bind();
+		void Bind(const glm::mat4& projection, const glm::mat4& view);
 
 		void SetBool(const std::string& name, bool value);
 		void SetInt(const std::string& name, int value);

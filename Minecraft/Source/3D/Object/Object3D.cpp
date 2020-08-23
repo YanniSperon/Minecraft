@@ -83,18 +83,12 @@ glm::mat4 MC::Object3D::GetTransformationMatrix()
 	return glm::translate(glm::mat4(1.0f), m_Translation) * glm::yawPitchRoll(glm::radians(m_Rotation.x), glm::radians(m_Rotation.y), glm::radians(m_Rotation.z)) * glm::scale(glm::mat4(1.0f), m_Scale);
 }
 
-void MC::Object3D::Bind()
-{
-	m_Shader->Bind();
-	m_Texture->Bind();
-	m_Mesh->Bind();
-}
-
 void MC::Object3D::Draw(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& modelOffset)
 {
-	Bind();
-	m_Shader->SetMat4("P", projection);
-	m_Shader->SetMat4("V", view);
+	m_Shader->Bind(projection, view);
+	m_Texture->Bind();
+	m_Mesh->Bind();
+
 	m_Shader->SetMat4("M", modelOffset * GetTransformationMatrix());
 	m_Mesh->Draw();
 }

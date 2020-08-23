@@ -4,9 +4,9 @@ layout (location = 0) in vec3 in_VertexPosition;
 layout (location = 1) in vec3 in_VertexNormal;
 layout (location = 2) in vec2 in_VertexTexCoord;
 
-layout (std140) uniform matrices
+layout (std140) uniform ubo_Matrices
 {
-	mat4 M;
+	mat4 P;
 	mat4 V;
 };
 
@@ -16,6 +16,6 @@ out vec2 s_TexCoord;
 
 void main()
 {
-	gl_Position = P * matrices.V * matrices.M * vec4(in_VertexPosition, 1.0);
+	gl_Position = P * V * M * vec4(in_VertexPosition, 1.0);
 	s_TexCoord = in_VertexTexCoord;
 }

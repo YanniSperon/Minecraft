@@ -1,7 +1,7 @@
 #pragma once
 
 #include "3D/Scene/Camera.h"
-#include "3D/Object/Object3D.h"
+#include "3D/Chunk/Chunk.h"
 
 #include <memory>
 #include <vector>
@@ -10,7 +10,7 @@
 namespace MC {
 	class Scene {
 	private:
-		std::vector<std::unique_ptr<Object3D>> m_Object3Ds;
+		std::vector<std::unique_ptr<Chunk>> m_Chunks;
 		std::vector<std::unique_ptr<Camera>> m_Cameras;
 		int m_CurrentCamera;
 
@@ -23,32 +23,32 @@ namespace MC {
 
 		void Draw();
 
-		void AddObject3D(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath);
+		void AddChunk(const glm::ivec3& position);
 		void AddCamera();
 
-		void RemoveObject3D(int index);
+		void RemoveChunk(int index);
 		void RemoveCamera(int index);
-		void RemoveFirstObject3D();
+		void RemoveFirstChunk();
 		void RemoveFirstCamera();
-		void RemoveLastObject3D();
+		void RemoveLastChunk();
 		void RemoveLastCamera();
 
-		Object3D& GetLastObject3D();
+		Chunk& GetLastChunk();
 		Camera& GetLastCamera();
 
-		std::vector<std::unique_ptr<Object3D>>& GetObject3Ds();
+		std::vector<std::unique_ptr<Chunk>>& GetChunks();
 		std::vector<std::unique_ptr<Camera>>& GetCameras();
 
-		Object3D& GetObject3D(int index);
+		Chunk& GetChunk(int index);
 		Camera& GetCamera(int index);
 
 		Camera& GetCurrentCamera();
 		void SetCurrentCamera(int currentCamera);
 
-		int GetNumberOfObject3Ds();
-		int GetNumberOfCameras();
-
-		int GetNumberOfVertices();
-		int GetNumberOfIndices();
+		//int GetNumberOfObject3Ds();
+		//int GetNumberOfCameras();
+		//
+		//int GetNumberOfVertices();
+		//int GetNumberOfIndices();
 	};
 }

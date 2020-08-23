@@ -9,7 +9,7 @@
 static bool s_InitializedGL = false;
 
 MC::Window::Window()
-    : m_Window(nullptr), m_Width(Global::GetConfig().GetStartingWidth()), m_Height(Global::GetConfig().GetStartingHeight()), m_GUI(nullptr), m_CurrentScene(std::make_unique<Scene>()), m_CurrentShaderID(0)
+    : m_Window(nullptr), m_Width(Global::GetConfig().GetStartingWidth()), m_Height(Global::GetConfig().GetStartingHeight()), m_GUI(nullptr), m_CurrentScene(std::make_unique<Scene>()), m_CurrentlyBoundShaderID(0)
 {
     if (!s_InitializedGL) {
         //////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,9 +86,9 @@ MC::Scene& MC::Window::GetCurrentScene()
     return *m_CurrentScene;
 }
 
-GLuint MC::Window::GetCurrentShaderID()
+GLuint MC::Window::GetCurrentlyBoundShaderID()
 {
-    return m_CurrentShaderID;
+    return m_CurrentlyBoundShaderID;
 }
 
 void MC::Window::SetWidth(int width)
@@ -116,9 +116,9 @@ void MC::Window::SetCurrentScene(std::unique_ptr<Scene> scene)
     m_CurrentScene = std::move(scene);
 }
 
-void MC::Window::SetCurrentShaderID(GLuint shaderID)
+void MC::Window::SetCurrentlyBoundShaderID(GLuint shaderID)
 {
-    m_CurrentShaderID = shaderID;
+    m_CurrentlyBoundShaderID = shaderID;
 }
 
 void MC::Window::ReplaceGUI(GUI* gui)

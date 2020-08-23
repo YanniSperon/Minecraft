@@ -2,21 +2,13 @@
 #include "Console.h"
 
 MC::Scene::Scene()
-	: m_Object3Ds(), m_Cameras(), m_CurrentCamera(0), m_ShouldRecalculateGeometryNumbers(false), m_NumberOfVertices(0), m_NumberOfIndices(0)
+	: m_Chunks(), m_Cameras(), m_CurrentCamera(0), m_ShouldRecalculateGeometryNumbers(false), m_NumberOfVertices(0), m_NumberOfIndices(0)
 {
 	m_Cameras.push_back(std::make_unique<Camera>());
 }
 
 MC::Scene::~Scene()
 {
-	//for (int i = 0; i < m_Object3Ds.size(); i++) {
-	//	delete m_Object3Ds[i];
-	//}
-	m_Object3Ds.clear();
-	//for (int i = 0; i < m_Cameras.size(); i++) {
-	//	delete m_Cameras[i];
-	//}
-	m_Cameras.clear();
 }
 
 void MC::Scene::Draw()
@@ -26,17 +18,15 @@ void MC::Scene::Draw()
 	glm::mat4 view = currentCamera.GetViewMatrix();
 	glm::mat4 offset = glm::mat4(1.0f);
 	currentCamera.DrawSkybox(projection, view, offset);
-	for (int i = 0; i < m_Object3Ds.size(); i++) {
-		m_Object3Ds[i]->Draw(projection, view, offset);
+	for (int i = 0; i < m_Chunks.size(); i++) {
+		m_Chunks[i]->Draw(projection, view, offset);
 	}
+	Shader::Unbind();
 }
 
-void MC::Scene::AddObject3D(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath)
+void MC::Scene::AddChunk(const glm::ivec3& position)
 {
-	//Object3D* tempObj = new Object3D(meshPath, shaderPath, texturePath);
-	//Console::Info("Pushing back %i", tempObj);
-	m_Object3Ds.push_back(std::make_unique<Object3D>(meshPath, shaderPath, texturePath));
-	//Console::Info("Pushed back %i", tempObj);
+	m_Chunks.push_back(std::make_unique<Chunk>(position));
 	m_ShouldRecalculateGeometryNumbers = true;
 }
 
@@ -45,10 +35,10 @@ void MC::Scene::AddCamera()
 	m_Cameras.push_back(std::make_unique<Camera>());
 }
 
-void MC::Scene::RemoveObject3D(int index)
+void MC::Scene::RemoveChunk(int index)
 {
-	if (m_Object3Ds.size() < index && index > 0) {
-		m_Object3Ds.erase(m_Object3Ds.begin() + index);
+	if (m_Chunks.size() < index && index > 0) {
+		m_Chunks.erase(m_Chunks.begin() + index);
 		m_ShouldRecalculateGeometryNumbers = true;
 	}
 }
@@ -71,10 +61,10 @@ void MC::Scene::RemoveCamera(int index)
 	}
 }
 
-void MC::Scene::RemoveFirstObject3D()
+void MC::Scene::RemoveFirstChunk()
 {
-	if (m_Object3Ds.size() > 0) {
-		m_Object3Ds.erase(m_Object3Ds.begin());
+	if (m_Chunks.size() > 0) {
+		m_Chunks.erase(m_Chunks.begin());
 		m_ShouldRecalculateGeometryNumbers = true;
 	}
 }
@@ -87,10 +77,10 @@ void MC::Scene::RemoveFirstCamera()
 	}
 }
 
-void MC::Scene::RemoveLastObject3D()
+void MC::Scene::RemoveLastChunk()
 {
-	if (m_Object3Ds.size() > 0) {
-		m_Object3Ds.pop_back();
+	if (m_Chunks.size() > 0) {
+		m_Chunks.pop_back();
 		m_ShouldRecalculateGeometryNumbers = true;
 	}
 }
@@ -106,9 +96,9 @@ void MC::Scene::RemoveLastCamera()
 }
 
 // Only use this when you are certain the scene has at least one object
-MC::Object3D& MC::Scene::GetLastObject3D()
+MC::Chunk& MC::Scene::GetLastChunk()
 {
-	return *m_Object3Ds.back();
+	return *m_Chunks.back();
 }
 
 MC::Camera& MC::Scene::GetLastCamera()
@@ -116,9 +106,9 @@ MC::Camera& MC::Scene::GetLastCamera()
 	return *m_Cameras.back();
 }
 
-std::vector<std::unique_ptr<MC::Object3D>>& MC::Scene::GetObject3Ds()
+std::vector<std::unique_ptr<MC::Chunk>>& MC::Scene::GetChunks()
 {
-	return m_Object3Ds;
+	return m_Chunks;
 }
 
 std::vector<std::unique_ptr<MC::Camera>>& MC::Scene::GetCameras()
@@ -127,9 +117,9 @@ std::vector<std::unique_ptr<MC::Camera>>& MC::Scene::GetCameras()
 }
 
 // Only use this when you are certain the index is valid
-MC::Object3D& MC::Scene::GetObject3D(int index)
+MC::Chunk& MC::Scene::GetChunk(int index)
 {
-	return *m_Object3Ds[index];
+	return *m_Chunks[index];
 }
 
 // Only use this when you are certain the index is valid
@@ -150,40 +140,40 @@ void MC::Scene::SetCurrentCamera(int currentCamera)
 	}
 }
 
-int MC::Scene::GetNumberOfObject3Ds()
-{
-	return m_Object3Ds.size();
-}
-
-int MC::Scene::GetNumberOfCameras()
-{
-	return m_Cameras.size();
-}
-
-int MC::Scene::GetNumberOfVertices()
-{
-	if (m_ShouldRecalculateGeometryNumbers) {
-		m_NumberOfVertices = 0;
-		m_NumberOfIndices = 0;
-		for (int i = 0; i < m_Object3Ds.size(); i++) {
-			m_NumberOfVertices += m_Object3Ds[i]->GetMesh().GetNumVertices();
-			m_NumberOfIndices += m_Object3Ds[i]->GetMesh().GetNumIndices();
-		}
-		m_ShouldRecalculateGeometryNumbers = false;
-	}
-	return m_NumberOfVertices;
-}
-
-int MC::Scene::GetNumberOfIndices()
-{
-	if (m_ShouldRecalculateGeometryNumbers) {
-		m_NumberOfVertices = 0;
-		m_NumberOfIndices = 0;
-		for (int i = 0; i < m_Object3Ds.size(); i++) {
-			m_NumberOfVertices += m_Object3Ds[i]->GetMesh().GetNumVertices();
-			m_NumberOfIndices += m_Object3Ds[i]->GetMesh().GetNumIndices();
-		}
-		m_ShouldRecalculateGeometryNumbers = false;
-	}
-	return m_NumberOfIndices;
-}
+//int MC::Scene::GetNumberOfObject3Ds()
+//{
+//	return m_Object3Ds.size();
+//}
+//
+//int MC::Scene::GetNumberOfCameras()
+//{
+//	return m_Cameras.size();
+//}
+//
+//int MC::Scene::GetNumberOfVertices()
+//{
+//	if (m_ShouldRecalculateGeometryNumbers) {
+//		m_NumberOfVertices = 0;
+//		m_NumberOfIndices = 0;
+//		for (int i = 0; i < m_Object3Ds.size(); i++) {
+//			m_NumberOfVertices += m_Object3Ds[i]->GetMesh().GetNumVertices();
+//			m_NumberOfIndices += m_Object3Ds[i]->GetMesh().GetNumIndices();
+//		}
+//		m_ShouldRecalculateGeometryNumbers = false;
+//	}
+//	return m_NumberOfVertices;
+//}
+//
+//int MC::Scene::GetNumberOfIndices()
+//{
+//	if (m_ShouldRecalculateGeometryNumbers) {
+//		m_NumberOfVertices = 0;
+//		m_NumberOfIndices = 0;
+//		for (int i = 0; i < m_Object3Ds.size(); i++) {
+//			m_NumberOfVertices += m_Object3Ds[i]->GetMesh().GetNumVertices();
+//			m_NumberOfIndices += m_Object3Ds[i]->GetMesh().GetNumIndices();
+//		}
+//		m_ShouldRecalculateGeometryNumbers = false;
+//	}
+//	return m_NumberOfIndices;
+//}

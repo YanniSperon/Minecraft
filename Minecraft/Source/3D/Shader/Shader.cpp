@@ -12,9 +12,14 @@ MC::Shader::Shader(const std::string& name)
     std::string geometryPath = name + std::string(".geom");
     std::string fragmentPath = name + std::string(".frag");
     LoadShader(geometryPath.c_str(), fragmentPath.c_str());
+
+    glUniformBlockBinding(m_ID, glGetUniformBlockIndex(m_ID, "ubo_Matrices"), 0);
+
     glGenBuffers(1, &m_UBO);
+
     glBindBuffer(GL_UNIFORM_BUFFER, m_UBO);
     glBufferData(GL_UNIFORM_BUFFER, 128, nullptr, GL_DYNAMIC_DRAW);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_UBO, 0, 2 * sizeof(glm::mat4));
 }
 
 MC::Shader::~Shader()
@@ -90,12 +95,14 @@ void MC::Shader::LoadShader(const char* geometryShaderPath, const char* fragment
     glDeleteShader(fragment);
 }
 
-void MC::Shader::Bind()
+void MC::Shader::Bind(const glm::mat4& projection, const glm::mat4& view)
 {
-    if (Global::GetWindow().GetCurrentShaderID() != m_ID) {
+    if (Global::GetWindow().GetCurrentlyBoundShaderID() != m_ID) {
         glUseProgram(m_ID);
         glBindBuffer(GL_UNIFORM_BUFFER, m_UBO);
-        Global::GetWindow().SetCurrentShaderID(m_ID);
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &projection[0][0]);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &view[0][0]);
+        Global::GetWindow().SetCurrentlyBoundShaderID(m_ID);
     }
 }
 
@@ -177,4 +184,5 @@ bool MC::Shader::GetHasFakeUser()
 void MC::Shader::Unbind()
 {
     glUseProgram(0);
+    Global::GetWindow().SetCurrentlyBoundShaderID(0);
 }

@@ -3,6 +3,7 @@
 #include "Devices.h"
 #include "GUI/GUI.h"
 #include "Global.h"
+#include "Random.h"
 #include "3D/Object/Object3D.h"
 #include "3D/Scene/Camera.h"
 
@@ -28,10 +29,25 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     //////////////////////////////////////////////////////////////////////////////////////////////
     Global::GetWindow().GetCurrentScene().GetCurrentCamera().SetSkybox(std::make_unique<Object3D>("Resources/Skybox.obj", "Resources/Basic", "Resources/Skybox.png"));
-    Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Basic.png");
-    Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(0.0f, 0.0f, -5.0f));
-    Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Sphere.obj", "Resources/Basic", "Resources/Basic.png");
-    Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(0.0f, 0.0f, 5.0f));
+    Global::GetWindow().GetCurrentScene().AddChunk(glm::ivec3(0, 0, 0));
+    for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 64; y++) {
+            for (int z = 0; z < 16; z++) {
+                Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(x, y, z).SetMaterial(Material::Dirt);
+            }
+        }
+    }
+    Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(5, 20, 5).SetMaterial(Material::Air);
+    //for (int y = 0; y < 64; y++) {
+    //    for (int x = 0; x < 16; x++) {
+    //        for (int z = 0; z < 16; z++) {
+    //            //Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Instanced", "Resources/Basic.png");
+    //            Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Dirt.png");
+    //            //Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(Random::FloatIncExcl(-10.0f, 10.0f), Random::FloatIncExcl(-10.0f, 10.0f), Random::FloatIncExcl(-10.0f, 10.0f)));
+    //            Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(x, y, z));
+    //        }
+    //    }
+    //}
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
