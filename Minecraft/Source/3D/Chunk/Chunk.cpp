@@ -4,27 +4,8 @@
 #include "3D/Scene/Scene.h"
 
 MC::Chunk::Chunk(const glm::ivec3& chunkPosition)
-	: /*m_Blocks(), */m_ChunkPosition(chunkPosition), m_Blocks(new Block[16 * 256 * 16]())
+	: m_ChunkPosition(chunkPosition), m_Blocks(new Block[16 * 256 * 16]())
 {
-	//for (int x = 0; x < 16; x++) {
-	//	for (int y = 0; y < 256; y++) {
-	//		for (int z = 0; z < 16; z++) {
-	//			Console::Info("Block %i", GetBlock(x, y, z)->GetMaterial());
-	//		}
-	//	}
-	//}
-	//m_Blocks.resize(16);
-	//for (int x = 0; x < 16; x++) {
-	//	m_Blocks[x].resize(256);
-	//	for (int y = 0; y < 64; y++) {
-	//		m_Blocks[x][y].resize(16);
-	//		for (int z = 0; z < 16; z++) {
-	//			m_Blocks[x][y][z] = std::make_unique<Block>();
-	//			m_Blocks[x][y][z]->PlaceInChunk(chunkPosition, glm::ivec3(x, y, z));
-	//		}
-	//	}
-	//}
-
 	for (int x = 0; x < 16; x++) {
 		for (int y = 0; y < 256; y++) {
 			for (int z = 0; z < 16; z++) {

@@ -20,10 +20,8 @@ MC::MeshAnimatedObject3D::~MeshAnimatedObject3D()
 
 void MC::MeshAnimatedObject3D::Update(float deltaTime)
 {
-	Console::Info("Updating animation");
 	m_Timer.Update(deltaTime);
 	if (m_Timer.IsFinished()) {
-		Console::Info("Timer finished advancing animation");
 		m_CurrentFrame += 1;
 		if (m_CurrentFrame == m_NumberOfFrames) {
 			m_CurrentFrame = 0;

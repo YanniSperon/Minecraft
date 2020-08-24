@@ -31,7 +31,7 @@ namespace MC {
 
 		void AddChunk(const glm::ivec3& position);
 		void AddCamera();
-		void AddEntity(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath, int numberOfFrames, const glm::vec3& hitboxMin, const glm::vec3& hitboxMax);
+		void AddEntity(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath, int numberOfFrames, const glm::vec3& hitboxMin, const glm::vec3& hitboxMax, const glm::vec3& terminalVelocity);
 
 		void RemoveChunk(int index);
 		void RemoveCamera(int index);

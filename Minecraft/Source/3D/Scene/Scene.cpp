@@ -46,9 +46,9 @@ void MC::Scene::AddCamera()
 	m_Cameras.push_back(std::make_unique<Camera>());
 }
 
-void MC::Scene::AddEntity(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath, int numberOfFrames, const glm::vec3& hitboxMin, const glm::vec3& hitboxMax)
+void MC::Scene::AddEntity(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath, int numberOfFrames, const glm::vec3& hitboxMin, const glm::vec3& hitboxMax, const glm::vec3& terminalVelocity)
 {
-	m_Entities.push_back(std::make_unique<Entity>(meshPath, shaderPath, texturePath, numberOfFrames, hitboxMin, hitboxMax));
+	m_Entities.push_back(std::make_unique<Entity>(meshPath, shaderPath, texturePath, numberOfFrames, hitboxMin, hitboxMax, terminalVelocity));
 	m_ShouldRecalculateGeometryNumbers = true;
 }
 
