@@ -14,7 +14,7 @@ namespace MC {
 		glm::vec3 m_Velocity;
 
 		float m_Gravity;
-		bool m_IsMoving;
+		bool m_IsAnimating;
 	public:
 		Entity(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath, int numberOfFrames, const glm::vec3& hitboxMin, const glm::vec3& hitboxMax);
 		~Entity();
@@ -24,7 +24,7 @@ namespace MC {
 		void SetVelocity(glm::vec3 velocity);
 
 		void SetGravity(float gravity);
-		void SetIsMoving(bool isMoving);
+		void SetIsAnimating(bool isAnimating);
 
 		bool IsInside(const glm::vec3& translation, const glm::vec3& hitboxMin, const glm::vec3& hitboxMax);
 	};

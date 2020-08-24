@@ -1,13 +1,13 @@
 #include "Timer.h"
 
 Timer::Timer(float timeLimit)
-	: m_CurrentTime(0.0f), m_IsRunning(false), m_TimeLimit(timeLimit)
+	: m_CurrentTime(0.0f), m_IsRunning(true), m_TimeLimit(timeLimit)
 {
 
 }
 
 Timer::Timer(int frameRate)
-	: m_CurrentTime(0.0f), m_IsRunning(false), m_TimeLimit(1.0f / (float) frameRate)
+	: m_CurrentTime(0.0f), m_IsRunning(true), m_TimeLimit(1.0f / (float) frameRate)
 {
 
 }

@@ -21,6 +21,7 @@ namespace MC {
 
 		virtual void Update(float deltaTime);
 
+		static std::string GetPath(const std::string& prefix, const std::string& suffix, const std::string& currentFrameString);
 		static std::string GetPrefix(const std::string& path);
 		static std::string GetSuffix(const std::string& path);
 	};

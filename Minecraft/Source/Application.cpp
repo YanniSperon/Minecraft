@@ -80,7 +80,9 @@ int main() {
     }
     Global::GetWindow().GetCurrentScene().GetCurrentCamera().SetTranslation(glm::vec3(0.0f, 64.0f, 0.0f));
     //Global::GetWindow().GetCurrentScene().AddEntity("Resources/Steve.obj", "Resources/Basic", "Resources/Steve.png", 0, glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-    Global::GetWindow().GetCurrentScene().AddEntity("Resources/Sphere.obj", "Resources/Basic", "Resources/Basic.png", 0, glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    //Global::GetWindow().GetCurrentScene().AddEntity("Resources/Sphere.obj", "Resources/Basic", "Resources/Basic.png", 0, glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    Global::GetWindow().GetCurrentScene().AddEntity("Resources/AnimatedCube/AnimatedCube.obj", "Resources/Basic", "Resources/White.png", 48, glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    Global::GetWindow().GetCurrentScene().GetLastEntity().SetIsAnimating(true);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 

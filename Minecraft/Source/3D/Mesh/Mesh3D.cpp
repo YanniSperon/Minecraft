@@ -46,6 +46,7 @@ GLsizeiptr MC::Mesh3D::IndexBufferSize()
 }
 
 void MC::Mesh3D::LoadToRAM(const std::string& path) {
+	Console::Warning("Loading %s", path.c_str());
 	std::vector<Vertex3D> tempVertices;
 	std::vector<GLuint> tempIndices;
 	std::vector<glm::vec2> tempTex;

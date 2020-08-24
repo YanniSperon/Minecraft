@@ -1,7 +1,8 @@
 #include "Entity.h"
+#include "Console.h"
 
 MC::Entity::Entity(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath, int numberOfFrames, const glm::vec3& hitboxMin, const glm::vec3& hitboxMax)
-	: MeshAnimatedObject3D(meshPath, shaderPath, texturePath, numberOfFrames), m_HitboxMax(hitboxMax), m_HitboxMin(hitboxMin), m_Velocity(0.0f), m_Gravity(-9.80665), m_IsMoving(false)
+	: MeshAnimatedObject3D(meshPath, shaderPath, texturePath, numberOfFrames), m_HitboxMax(hitboxMax), m_HitboxMin(hitboxMin), m_Velocity(0.0f), m_Gravity(-9.80665), m_IsAnimating(false)
 {
 }
 
@@ -11,7 +12,8 @@ MC::Entity::~Entity()
 
 void MC::Entity::Update(float deltaTime)
 {
-	if (m_IsMoving) {
+	if (m_IsAnimating) {
+		Console::Info("Animating");
 		MeshAnimatedObject3D::Update(deltaTime);
 	}
 	m_Translation.x += m_Velocity.x * deltaTime;
@@ -31,9 +33,9 @@ void MC::Entity::SetGravity(float gravity)
 	m_Gravity = gravity;
 }
 
-void MC::Entity::SetIsMoving(bool isMoving)
+void MC::Entity::SetIsAnimating(bool isAnimating)
 {
-	m_IsMoving = isMoving;
+	m_IsAnimating = isAnimating;
 }
 
 bool MC::Entity::IsInside(const glm::vec3& translation, const glm::vec3& hitboxMin, const glm::vec3& hitboxMax)
