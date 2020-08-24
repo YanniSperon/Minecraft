@@ -28,26 +28,60 @@ int main() {
     //////////////////////////////////////////////////////////////////////////////////////////////
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     //////////////////////////////////////////////////////////////////////////////////////////////
+
     Global::GetWindow().GetCurrentScene().GetCurrentCamera().SetSkybox(std::make_unique<Object3D>("Resources/Skybox.obj", "Resources/Basic", "Resources/Skybox.png"));
     Global::GetWindow().GetCurrentScene().AddChunk(glm::ivec3(0, 0, 0));
     for (int x = 0; x < 16; x++) {
         for (int y = 0; y < 64; y++) {
             for (int z = 0; z < 16; z++) {
-                Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(x, y, z).SetMaterial(Material::Dirt);
+                Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(x, y, z)->SetMaterial(Material::Dirt);
             }
         }
     }
-    Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(5, 20, 5).SetMaterial(Material::Air);
-    //for (int y = 0; y < 64; y++) {
-    //    for (int x = 0; x < 16; x++) {
-    //        for (int z = 0; z < 16; z++) {
-    //            //Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Instanced", "Resources/Basic.png");
-    //            Global::GetWindow().GetCurrentScene().AddObject3D("Resources/Block.obj", "Resources/Basic", "Resources/Dirt.png");
-    //            //Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(Random::FloatIncExcl(-10.0f, 10.0f), Random::FloatIncExcl(-10.0f, 10.0f), Random::FloatIncExcl(-10.0f, 10.0f)));
-    //            Global::GetWindow().GetCurrentScene().GetLastObject3D().SetTranslation(glm::vec3(x, y, z));
-    //        }
-    //    }
-    //}
+    Global::GetWindow().GetCurrentScene().AddChunk(glm::ivec3(0, 0, 1));
+    for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 64; y++) {
+            for (int z = 0; z < 16; z++) {
+                Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(x, y, z)->SetMaterial(Material::Dirt);
+            }
+        }
+    }
+    Global::GetWindow().GetCurrentScene().AddChunk(glm::ivec3(-1, 0, 0));
+    for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 64; y++) {
+            for (int z = 0; z < 16; z++) {
+                Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(x, y, z)->SetMaterial(Material::Dirt);
+            }
+        }
+    }
+    Global::GetWindow().GetCurrentScene().AddChunk(glm::ivec3(-1, 0, 1));
+    for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 64; y++) {
+            for (int z = 0; z < 16; z++) {
+                Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(x, y, z)->SetMaterial(Material::Dirt);
+            }
+        }
+    }
+    Global::GetWindow().GetCurrentScene().AddChunk(glm::ivec3(1, 0, 0));
+    for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 64; y++) {
+            for (int z = 0; z < 16; z++) {
+                Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(x, y, z)->SetMaterial(Material::Dirt);
+            }
+        }
+    }
+    Global::GetWindow().GetCurrentScene().AddChunk(glm::ivec3(1, 0, 1));
+    for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 64; y++) {
+            for (int z = 0; z < 16; z++) {
+                Global::GetWindow().GetCurrentScene().GetLastChunk().GetBlock(x, y, z)->SetMaterial(Material::Dirt);
+            }
+        }
+    }
+    Global::GetWindow().GetCurrentScene().GetCurrentCamera().SetTranslation(glm::vec3(0.0f, 64.0f, 0.0f));
+    //Global::GetWindow().GetCurrentScene().AddEntity("Resources/Steve.obj", "Resources/Basic", "Resources/Steve.png", 0, glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    Global::GetWindow().GetCurrentScene().AddEntity("Resources/Sphere.obj", "Resources/Basic", "Resources/Basic.png", 0, glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     glfwSetInputMode(Global::GetWindow().GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -107,9 +141,19 @@ int main() {
         if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_SPACE] || Global::GetKeyboardInput().m_KeysPressed[MC_KEY_SPACE]) {
             camera.MoveUp(deltaTime);
         }
+        if (Global::GetKeyboardInput().m_KeysHeld[MC_KEY_T]) {
+            Global::GetWindow().GetCurrentScene().GetLastEntity().SetTranslation(glm::vec3(0.0f, 70.0f, 0.0f));
+            Global::GetWindow().GetCurrentScene().GetLastEntity().SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+        }
         if (Global::GetMouseInput().m_MouseMoved) {
             camera.LookAtMouse(Global::GetConfig().GetMouseSensitivity(), Global::GetMouseInput().m_MouseX, Global::GetMouseInput().m_MouseY);
         }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        Global::GetWindow().GetCurrentScene().Update(deltaTimeWithTimeFactor);
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////

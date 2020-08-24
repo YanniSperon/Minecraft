@@ -10,7 +10,7 @@
 
 namespace MC {
 	class Object3D {
-	private:
+	protected:
 		std::shared_ptr<Mesh3D> m_Mesh;
 		std::shared_ptr<Shader> m_Shader;
 		std::shared_ptr<Texture> m_Texture;

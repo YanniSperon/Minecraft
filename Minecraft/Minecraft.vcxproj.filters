@@ -60,9 +60,6 @@
     <ClInclude Include="Source\3D\Chunk\Chunk.h">
       <Filter>3D\Chunk</Filter>
     </ClInclude>
-    <ClInclude Include="Source\3D\Chunk\ChunkManager.h">
-      <Filter>3D\Chunk</Filter>
-    </ClInclude>
     <ClInclude Include="Source\3D\Mesh\Mesh3D.h">
       <Filter>3D\Mesh</Filter>
     </ClInclude>
@@ -974,6 +971,9 @@
     </ClInclude>
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\3D\Chunk\Block.h" />
+    <ClInclude Include="Source\3D\Entity\Entity.h" />
+    <ClInclude Include="Source\3D\Object\MeshAnimatedObject3D.h" />
+    <ClInclude Include="Source\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp">
@@ -1040,5 +1040,8 @@
     <ClCompile Include="Source\Window.cpp" />
     <ClCompile Include="Source\3D\Chunk\Block.cpp" />
     <ClCompile Include="Source\3D\Chunk\Chunk.cpp" />
+    <ClCompile Include="Source\Timer.cpp" />
+    <ClCompile Include="Source\3D\Object\MeshAnimatedObject3D.cpp" />
+    <ClCompile Include="Source\3D\Entity\Entity.cpp" />
   </ItemGroup>
 </Project>
